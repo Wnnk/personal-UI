@@ -1,0 +1,24 @@
+{
+  "name": "commonUI",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "组件库",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "pnpm -C play dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@commonUI/components": "workspace:*",
+    "@commonUI/theme-chalk": "workspace:*",
+    "@commonUI/utils": "workspace:*",
+    "typescript": "^5.5.3",
+    "vue": "^3.4.31"
+  },
+  "devDependencies": {
+    "unplugin-vue-define-options": "^1.4.5"
+  }
+}
