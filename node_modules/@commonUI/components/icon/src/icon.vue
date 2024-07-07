@@ -5,10 +5,11 @@ import { computed, defineProps } from "vue";
 const bem = createNamespace('icon')
 
 defineOptions({
-  name:'ui-icon',
+  name:'z-icon',
 })
 
 const props = defineProps(iconProps)
+
 
 const style = computed(() => {
   if (!props.size &&props.color ) return {};
@@ -28,5 +29,7 @@ const style = computed(() => {
   </i>
 </template>
 
-<style lang='scss' scoped>
+<style  scoped>
+
+
 </style>

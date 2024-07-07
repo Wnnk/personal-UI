@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm -C play dev"
+    "dev": "pnpm -C play dev",
+    "doc:dev": "pnpm -C docs dev"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,9 @@
     "vue": "^3.4.31"
   },
   "devDependencies": {
-    "unplugin-vue-define-options": "^1.4.5"
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "sass": "^1.77.6",
+    "unplugin-vue-define-options": "^1.4.5",
+    "vitepress": "^1.2.3"
   }
 }
