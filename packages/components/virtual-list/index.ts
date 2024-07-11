@@ -1,14 +1,13 @@
 import { withInstall } from '@commonUI/utils/with-install';
-import _Tree from './src/Tree.vue';
+import _Virtual from './src/virtual';
 
-const Tree = withInstall(_Tree);
+const Tree = withInstall(_Virtual);
 
 export  default Tree
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ZTree: typeof Tree
+    ZVirtualList: typeof _Virtual
   }
 }
 
-export * from './src/tree.ts'
