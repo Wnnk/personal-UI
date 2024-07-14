@@ -106,6 +106,10 @@ const check = ref(true);
 const handleChange = (value:boolean) => {
   console.log(value)
 }
+
+const handleClick = (e:MouseEvent) => {
+  console.log(e)
+}
 </script>
 
 <template>
@@ -136,7 +140,37 @@ const handleChange = (value:boolean) => {
         {{ node.key }} - {{ node.label }}
       </template>
     </z-tree>
-
+    <z-button 
+      size="medium" 
+      type="danger" 
+      :round="true"  
+      :disabled="false"
+      icon-placement="left"
+      @click="handleClick"
+      @mousedown="handleClick"
+    >
+      <template #icon>
+        <z-icon>
+          <AddCircle></AddCircle>
+        </z-icon>
+      </template>
+      按钮
+    </z-button>
+    <z-input> 
+      <template #prepend>prepend</template> 
+      <template #prefixIcon>
+        <z-icon>
+          <AddCircle></AddCircle>
+        </z-icon>
+      </template>
+      <template #suffixIcon>
+        <z-icon>
+          <AddCircle></AddCircle>
+        </z-icon>
+      </template>
+      <template #append>append</template>
+    </z-input>
+    <!-- <z-time-ago :Date="new Date()"></z-time-ago> -->
   </div>
  <!-- 
   v-model: 

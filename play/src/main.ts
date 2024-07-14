@@ -4,12 +4,18 @@ import App from './App.vue'
 import Icon from "@commonUI/components/icon"
 import Tree from "@commonUI/components/tree"
 import Checkbox from '@commonUI/components/checkbox'
+import Button from '@commonUI/components/button'
+import Input from '@commonUI/components/input'
+import TimeAge from '@commonUI/components/timeago'
 import '@commonUI/theme-chalk/src/index.scss'
 
 const plugins = [
   Icon,
   Tree,
-  Checkbox
+  Checkbox,
+  Button,
+  TimeAge,
+  Input
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {

@@ -1,11 +1,11 @@
 <script setup lang='ts'>
 import { treeNodeEmits, treeNodeProps, treeInjectKey, TreeNode } from  './tree'
 import { createNamespace } from  '@commonUI/utils/create'
-import Switcher from './icon/Switcher.tsx'
+import Switcher from '@commonUI/components/internal-icon/Switcher.tsx'
 import ZIcon from '@commonUI/components/icon'
 import  ZCheckbox from '@commonUI/components/checkbox'
 import { computed, inject } from 'vue';
-import Loading from "./icon/Loading.tsx"
+import Loading from "@commonUI/components/internal-icon/Loading.tsx"
 import ZTreeNodeContent from './tree-node-content.tsx'
 
 const props = defineProps(treeNodeProps);

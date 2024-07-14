@@ -1,5 +1,5 @@
 import { withInstall } from '@commonUI/utils/with-install';
-import _Tree from './src/Tree.vue';
+import _Tree from './src/tree.vue';
 
 const Tree = withInstall(_Tree);
 
