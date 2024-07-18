@@ -7,6 +7,7 @@ import Checkbox from '@commonUI/components/checkbox'
 import Button from '@commonUI/components/button'
 import Input from '@commonUI/components/input'
 import TimeAge from '@commonUI/components/timeago'
+import DragForm from '@commonUI/components/drag-form'
 import '@commonUI/theme-chalk/src/index.scss'
 
 const plugins = [
@@ -15,7 +16,8 @@ const plugins = [
   Checkbox,
   Button,
   TimeAge,
-  Input
+  Input,
+  DragForm
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {

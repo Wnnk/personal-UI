@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
-import { ref} from 'vue'
+import { ref, watch} from 'vue'
 import { TreeOption, Key } from '@commonUI/components/tree/index'
+import {groupType,nodesType} from '@commonUI/components/drag-form/src/dragForm'
 const createData = (level: number = 4, parentKey:string = ''):any => {
   if (!level) return []
   const arr = new Array(6 - level).fill(0)
@@ -110,14 +111,64 @@ const handleChange = (value:boolean) => {
 const handleClick = (e:MouseEvent) => {
   console.log(e)
 }
+
+
+/** 
+ * @description 拖拽表单数据测试
+**/
+const dragData = ref<nodesType[]>([
+  {
+    label: '输入框',
+    id: '1',
+    dragType: 'input',
+  },
+  {
+    label: '下拉框',
+    id: '2',
+    dragType: 'select',
+    options:[
+      {
+        label: '选项1',
+        value: '1'
+      },
+      {
+        label: '选项2',
+        value: '2'
+      }
+    ]
+
+  },
+  {
+    label: '单选框',
+    id: '3',
+    dragType: 'radio',
+    value: '1',
+  }
+])
+const dragData2 = ref<nodesType[]>([
+  {
+    id:'10',
+    label: '输入框',
+    dragType: 'input',
+  },
+  {
+    id:'20',
+    label: '下拉框',
+    dragType:'select',
+  }
+])
+
+watch(dragData, (newVal, oldVal) => {
+  console.log('dragData', newVal, oldVal)
+})
 </script>
 
 <template>
   <div class="app">
-    <z-icon :size="50" >     
+    <!-- <z-icon :size="50" >     
       <AddCircle ></AddCircle>
     </z-icon>
-    <z-icon :size="50" :color="'blue'"><AddCircle ></AddCircle></z-icon>
+    <z-icon :size="50" :color="'blue'"><AddCircle ></AddCircle></z-icon> -->
    
     <!--  
       :label-field="'label'" 
@@ -127,7 +178,7 @@ const handleClick = (e:MouseEvent) => {
       
     -->
     <!-- selectable 可选节点 multiple 多选节点 selected-key 选中节点-->
-    {{ value }}
+    <!-- {{ value }}
     <z-tree 
       :data="treeData" 
       :on-load ="handleLoad"
@@ -155,7 +206,7 @@ const handleClick = (e:MouseEvent) => {
         </z-icon>
       </template>
       按钮
-    </z-button>
+    </z-button> -->
     <z-input> 
       <template #prepend>prepend</template> 
       <template #prefixIcon>
@@ -171,6 +222,8 @@ const handleClick = (e:MouseEvent) => {
       <template #append>append</template>
     </z-input>
     <!-- <z-time-ago :Date="new Date()"></z-time-ago> -->
+
+    <z-drag-form v-model:left-tree="dragData" :panel-value="dragData2"></z-drag-form>
   </div>
  <!-- 
   v-model: 
@@ -179,11 +232,11 @@ const handleClick = (e:MouseEvent) => {
   label
   change 
  -->
-  <z-checkbox 
+  <!-- <z-checkbox 
     label='节点'
     @change="handleChange"
   >
-  </z-checkbox>
+  </z-checkbox> -->
 </template>
 
 <style scoped lang="scss"> 

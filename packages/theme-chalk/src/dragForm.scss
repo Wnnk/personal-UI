@@ -1,0 +1,130 @@
+@use 'mixins/mixins.scss' as *;
+
+@include b(drag-form) {
+  display: grid;
+  grid-template-columns: 320px 1fr 200px;
+  grid-template-rows: 100%;
+  width: 100%;
+  height: 100%;
+  gap:10px;
+  overflow: auto;
+  background-color: rgb(163, 163, 163);
+  padding: 20px;
+  @include b(drag-tree) {
+    background-color: #fff;
+    border-radius: 10px;
+
+    @include e(collapse-icon) {
+      transform: rotate(0deg);
+      transition: transform 0.2s ease-in;
+      &.collapse {
+        transform: rotate(90deg);
+      }
+    }
+
+    @include e(nodeBox){
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+
+    }
+
+    @include e(first-level) {
+      font-size: 18px;
+      margin-right: 5px;
+    }
+
+    @include e(second-level) {
+      font-size: 14px;
+      background-color: #cfc7c7;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e7e6ec;
+      cursor: pointer;
+    }
+  }
+
+  @include b(drag-panel) {
+    background-color: #fff;
+    border-radius: 10px;
+
+    @include e(dragableBox) {
+      width: 100%;
+      height: 100%;
+    }
+
+    @include e(container) {
+      width: 100%;
+      height: 100%;
+      // display: grid;
+      // grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      // grid-template-rows: repeat(auto-fill, minmax(20px, 1fr));
+      // gap: 10px;
+      @include b(panel-display){
+        border: 1px solid #e7e6ec;
+        display: inline-block;
+       
+      }
+    }
+
+
+    @include b(panel-display){
+      position: relative;
+
+
+       /* 状态 */
+      @include b(item-status) {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border-radius: 50%;
+        min-width: 12px;
+        min-height: 12px;
+        background-color: #409eff;
+        color: #fff;
+        font-size: 12px;
+        transform:translate(50%, 50%);
+      }
+      /* 删除按钮 */
+      @include b(item-delete) {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: rgb(208, 38, 38);
+        transform: translate(50%, -50%);
+      }
+    }
+
+   
+  }
+
+  @include b(drag-config) {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    @include e(layout) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      place-items: center;
+      gap: 5px;
+     
+      .layout-item{
+        border: 1px solid #522fee;
+        width: 100%;
+        height: 100%;
+        padding: 8px;
+        margin: 5px;
+        box-sizing: border-box;
+        &:hover {
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}

@@ -238,6 +238,7 @@ const findNode = (key: Key) => {
  * @description 自下而上,根据子节点更新父节点的选中状态
  */
 const updateCheckedKeys = (node: TreeNode) => {
+  if (!node) return;
   if (node.parentKey) {
     const parentNode = findNode(node.parentKey);
     if (parentNode) {
