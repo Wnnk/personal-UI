@@ -34,7 +34,7 @@ const createUuid = () => {
     return v.toString(16);
   });
 }
-console.log(createUuid())
+
 /** 
  * @description: 深拷贝
  * @param {any} origin - 原始数据
@@ -85,6 +85,17 @@ const chooseNode = (node: nodesType) => {
 
 
 
+/**
+ * @description 触发添加节点事件
+ */
+
+ const addSchema = (node: nodesType) => {
+   emit('addSchema', node);
+ }
+
+
+
+
 </script>
 
 <template>
@@ -96,7 +107,7 @@ const chooseNode = (node: nodesType) => {
         :animation="150" 
         :clone="deepClone"
         >
-        <div v-for="node in nodes" :key="node.id" >
+        <div v-for="(node, index) in nodes" :key="node.id" >
           <div :class="[bem.e('item')]">
             <slot :node='node'>
               <div v-if="node.level === 1" :class="bem.e('first-level')">
@@ -108,11 +119,11 @@ const chooseNode = (node: nodesType) => {
                 >
                   <Switcher />
                 </z-icon>
+              <span @click="addSchema(node)">+</span>
               </div>
               <div v-else-if="node.level === 2" :class="bem.e('second-level')"  @click="chooseNode(node)">
                 <span>{{node.label}}</span>
               </div>
-                
             </slot>
           </div>
           <dragTree  v-show="node.collapse" v-model:nodes="node.children">

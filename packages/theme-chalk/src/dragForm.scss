@@ -63,17 +63,25 @@
       // grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       // grid-template-rows: repeat(auto-fill, minmax(20px, 1fr));
       // gap: 10px;
-      @include b(panel-display){
-        border: 1px solid #e7e6ec;
-        display: inline-block;
-       
-      }
+     
     }
 
 
     @include b(panel-display){
       position: relative;
+      border: 1px solid #e7e6ec;
+      display: inline-block;
+      box-sizing: content-box;
+      &:hover{
+        border: 1px solid #409eff;
+      }
 
+      @include  m(active){
+        border-style:dashed;
+        border-width: 2px;
+        border-color: #409eff;
+        
+      }
 
        /* 状态 */
       @include b(item-status) {
@@ -86,7 +94,7 @@
         background-color: #409eff;
         color: #fff;
         font-size: 12px;
-        transform:translate(50%, 50%);
+        transform:translate(0%, 50%);
       }
       /* 删除按钮 */
       @include b(item-delete) {

@@ -28,7 +28,7 @@ const deepCline = (obj: any, hash:WeakMap<any, any> = new WeakMap()) => {
 }
 
 const setCurrentItem = (node:any) => {
-    console.log(node);
+  emit('setCurrentItem', node);
 }
 const daleteCurrentItem = () => {
 
@@ -38,7 +38,8 @@ const changeFormItemData = () => {
 }
 
 const addSchema = (e:any) => {
-  console.log(e.data.label);
+  emit('changeFormItemData', e);
+
 }
 </script>
 
@@ -58,7 +59,7 @@ const addSchema = (e:any) => {
             :disabled="disabled"
             :formData="formData"
             :schema="schema"
-            :currentItem="currentItem"
+            :currentItem="formConfig.currentItem"
             :formConfig="formConfig"
             :index="index"
             @setCurrentItem="setCurrentItem"

@@ -17,7 +17,9 @@ export type nodesType ={
   id: string,
   value?: string,
   options?: optionsType[]
-  children?: nodesType[]
+  children?: nodesType[],
+  level: number,
+  collapse: boolean,
 }
 
 export const dragFormProps = {
@@ -44,15 +46,20 @@ export type DragFormEmits = typeof dragFormEmits;
  * @description leftTree
  * 
 **/
+
+
 export const leftTreeProps = {
   nodes:{
-    type: Array as PropType<any[]>, //any
+    type: Array as PropType<nodesType[]>, //any
     default: () => []
   },
 }
 
 export const leftTreeEmits = {
   "updateLeftTree": (value: any) => value,
+  "addSchema": (value: any) => {
+    return value;
+  },
 }
 
 
@@ -70,7 +77,6 @@ export type componentPropsType = {
   max?: string,
   /* Input 类型 */
   placeholder?: string,
-
 }
 export type SchemaType = {
   /* 组件唯一标识 */
@@ -82,7 +88,7 @@ export type SchemaType = {
   /* **修改为style */
   width:string,
   /* 组件属性 */
-  componentProps: Object,
+  componentProps: componentPropsType,
   /* 是否具有子节点 */
   children?: SchemaType[],
   /* 是否具有父节点 */
@@ -90,6 +96,7 @@ export type SchemaType = {
 }
 export type FormConfigType = {
   schemas: Array<SchemaType>, 
+  currentItem: any,
 }
 export const panelValueProps = {
   formConfig:{
@@ -113,6 +120,17 @@ export const panelValueProps = {
 export const panelValueEmits = {
   'setCurrentItem': (value: any) => value,
   'deleteCurrentItem': (value: any) => value,
+  'changeFormItemData': (value: any) => value,
+}
+
+
+export const componentProps = {
+
+  dynamicComponent:{
+    type: Object as PropType<componentPropsType>,
+    required: true,
+  }
+
 }
 
 /** 

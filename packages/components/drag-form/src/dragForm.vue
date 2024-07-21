@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
-import { dragFormProps, dragFormEmits } from './dragForm';
+import { createUuid } from '@commonUI/utils/createUuid';
+import { dragFormProps, dragFormEmits, SchemaType } from './dragForm';
 import dragTree from './dragTree.vue';
 import dragPanel from './dragPanel.vue';
 import dragConfig from './dragConfig.vue';
@@ -26,11 +27,14 @@ const nodes = ref<any[]>([
     id: '1',
     label: '基础字段',
     level: 1,
+    collapse: true,
     children: [
       {
         id: '1-1',
         label:'健康评估表',
         level:2,
+        collapse: false,
+        type: 'input',
       },
     ]
   },
@@ -38,18 +42,21 @@ const nodes = ref<any[]>([
     id: '2',
     label: '基本信息',
     level: 1,
+    collapse: false,
     children: [
       {
         id: '2-1',
         label: '姓名',
         type: 'input',
         level: 2,
+        collapse: true,
       },
       {
         id: '2-2',
         label: '性别',
         type: 'radio',
         level: 2,
+        collapse: true,
         options: [
           {
             label: '男',
@@ -70,10 +77,11 @@ const formConfig = ref({
     {
       id:'1',
       componentType:'input',
-      width: '200px',
+      width: '500px',
       component:'inputDisplay',
       componentProps: {
-        label: '测试',
+        label: '测试input',
+        value: '测试input值'
       }
     },
     {
@@ -82,7 +90,7 @@ const formConfig = ref({
       width: '100px',
       component:'radioDisplay',
       componentProps: {
-        label: '测试',
+        label: '性别',
         options:[
           {label: '男', value:'male'},
           {label: '女', value: 'female'}
@@ -95,7 +103,7 @@ const formConfig = ref({
       width: '50px',
       component:'inputDisplay',
       componentProps: {
-        label: '测试',
+        label: '测试input3',
       }
     },
     {
@@ -104,26 +112,86 @@ const formConfig = ref({
       width: '200px',
       component:'inputDisplay',
       componentProps: {
-        label: '测试',
+        label: '测试input4',
       }
     },
   ],
+  currentItem: null,
 })
 
 const disabled = ref(false);
 const formData = ref([])
+
+/** 
+ * @description 新增表单数据
+ * 
+  */
+ const addSchema = (schema: any) => {
+  console.log('新增表单数据',schema)
+  for (const node of nodes.value) {
+    if(node.id === schema.id) {
+      node.children.push({
+        id: createUuid(),
+        label: '新增字段',
+        type:  'radio',
+        level: 2,
+        collapse: false,
+        
+      })
+    }
+  }
+ }
+
+/** 
+ * @description 选择当前节点
+ **/
+
+ const setCurrentItem = (item: any) => {
+  console.log('选择当前节点',item)
+  formConfig.value.currentItem = item
+ }
+
+ /** 
+  * @description 创建表单数据
+  * 
+   */
+ const createSchema = (item: any) => {
+    const schema = {
+     id: createUuid(),
+     width: '200px',
+     component: `${item.type}Display`,
+     componentProps: {
+       label: item.label,
+     },
+     componentType: item.type,
+   }
+   return schema;
+
+ }
+
+/** 
+ * @description 更新表单
+  **/
+ const changeFormItemData = (data: any) => {
+  formConfig.value.schemas.push(createSchema(data.data));
+  console.log('更新表单',formConfig.value.schemas)
+ }
+
+
 </script>
 
 
 <template>
   <div :class="[bem.b()]">
-    <dragTree v-model:nodes="nodes" />
+    <dragTree v-model:nodes="nodes" @addSchema="addSchema"/>
     <dragPanel 
       :formConfig="formConfig" 
-      :formData="formData" 
-      @setCurrentItem="'选中当前元素节点'"
+      :currentItem="formConfig.currentItem"
+      @setCurrentItem="setCurrentItem"
       @deleteCurrentItem="'删除当前元素节点'"
+      @changeFormItemData="changeFormItemData"
       :disabled="disabled"
+      
     />
     <dragConfig
       :formConfig="'表单配置'"
