@@ -5,6 +5,7 @@ import { ref, computed, } from 'vue';
 import { nodesType, leftTreeProps, leftTreeEmits } from './dragForm'
 import dragTree from './dragTree.vue';
 import Switcher from '../../internal-icon/Switcher';
+import createNodePanel from './createNodePanel.vue';
 
 const bem = createNamespace('drag-tree');
 const props = defineProps(leftTreeProps);
@@ -93,6 +94,17 @@ const chooseNode = (node: nodesType) => {
    emit('addSchema', node);
  }
 
+ /** 
+  * @description: 触发定义组件事件
+  * @param {nodesType} node - 节点数据
+  * 
+**/
+const collapseCreateNode = ref(false); 
+const defineComponent = (node: nodesType) => {
+  /* 展开创建节点面板 */
+  collapseCreateNode.value = true;
+}
+
 
 
 
@@ -119,7 +131,7 @@ const chooseNode = (node: nodesType) => {
                 >
                   <Switcher />
                 </z-icon>
-              <span @click="addSchema(node)">+</span>
+              <span @click="defineComponent(node)">+</span>
               </div>
               <div v-else-if="node.level === 2" :class="bem.e('second-level')"  @click="chooseNode(node)">
                 <span>{{node.label}}</span>
@@ -135,6 +147,7 @@ const chooseNode = (node: nodesType) => {
       </VueDraggable>
     </div>
   </div>
+  <createNodePanel v-if="collapseCreateNode"></createNodePanel>
 </template>
 
 <style lang='scss' scoped>

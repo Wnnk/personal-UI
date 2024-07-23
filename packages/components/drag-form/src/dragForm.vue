@@ -99,20 +99,29 @@ const formConfig = ref({
     },
     {
       id:'3',
-      componentType:'input',
+      componentType:'select',
       width: '50px',
-      component:'inputDisplay',
+      component:'selectDisplay',
       componentProps: {
-        label: '测试input3',
+        label: '测试select',
+        options: [
+          {label: '选项1', value: '1'},
+          {label: '选项2', value: '2'},
+          {label: '选项3', value: '3'},
+          {label: '选项4', value: '4'},
+        ]
       }
     },
     {
       id:'4',
-      componentType:'input',
+      componentType:'date',
       width: '200px',
-      component:'inputDisplay',
+      component:'dateDisplay',
       componentProps: {
-        label: '测试input4',
+        label: '测试date',
+        value: '2022-01-01',
+        min: '2022-01-01',
+        max: '2024-12-31',
       }
     },
   ],
