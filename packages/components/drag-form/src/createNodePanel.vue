@@ -1,27 +1,28 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { ref } from 'vue';
+import { createNodePanelEmits, createNodePanelProps } from './dragForm'
 
 const bem = createNamespace('create-node-panel');
 const componentType = [
   {
     type:'input',
     label:'输入框',
-    componengt:'inputDisplay',
+    component:'inputDisplay',
     value:'input',
     placeholder:'请输入内容',
   },
   {
     type:'select',
     label:'下拉框',
-    componengt:'selectDisplay',
+    component:'selectDisplay',
     value:1,
     options:[{label:'选项1',value:1},{label:'选项2',value:2},{label:'选项3',value:3}],
   },
   {
     type:'radio',
     label:'单选框',
-    componengt:'radioDisplay',
+    component:'radioDisplay',
     value:1,
     options:[{label:'选项1',value:1},{label:'选项2',value:2},{label:'选项3',value:3}],
   },
@@ -35,7 +36,7 @@ const componentType = [
   {
     type: 'date',
     label: '日期选择器',
-    componengt: 'dateDisplay',
+    component: 'dateDisplay',
     value: '',
     placeholder: '请选择日期',
     min: '',
@@ -44,6 +45,9 @@ const componentType = [
   
 ];
 const currentCheck = ref(componentType[0]);
+
+// const props = defineProps(createNodePanelProps);
+const emit = defineEmits(createNodePanelEmits);
 
 /** 
  * @description: 添加选项
@@ -56,36 +60,45 @@ const addOption = () => {
   })
 }
 
+
+/** 
+ * @description: 取消创建面板
+**/
+const cancelCreateNode = () => {
+
+  emit('cancelCreateNode')
+}
+
+
 /** 
  * @description: 创建节点
  * 
 **/
 const createNode = () => {
-
+  emit('createNode', currentCheck.value);
+  cancelCreateNode();
 }
+
 
 </script>
 
 <template>
-  <div class="mask">
+  <div class="mask" @click.prevent.self="cancelCreateNode">
     <div :class="bem.b()">
       <div  v-for="item in componentType" :key="item.type"  :class="bem.e('create-item')" >
         <input 
           type="radio" 
           :value="item.type" 
-          @click="currentCheck = item" 
+          @click.stop="currentCheck = item" 
           name="createComponent" 
           id="createComponent" 
           />
         <label :for="`${item.label}`">{{item.label}}</label>
       </div>
-      <form :class="bem.e('create-content')">
+      <div :class="bem.e('create-content')">
         <div v-if="currentCheck.type === 'input'" :class="bem.e('content')">
           <div>
-            <span>命名:</span><input type="text" v-model="currentCheck.label">
-          </div>
-          <div>
-            <span>默认值:</span><input type="text" v-model="currentCheck.value">
+            <span>命名:</span><input type="text" v-model="currentCheck.value">
           </div>
           <div>
             <span>默认提示:</span><input type="text" v-model="currentCheck.placeholder">
@@ -109,8 +122,8 @@ const createNode = () => {
           <div><span>最小值:</span><input type="date"></div>
           <div><span>最大值:</span><input type="date"></div>
         </div>
-        <button type="submit" @click="createNode">确定创建</button>
-      </form>
+        <button type="button" @click="createNode">确定创建</button>
+      </div>
     </div>   
   </div>
 

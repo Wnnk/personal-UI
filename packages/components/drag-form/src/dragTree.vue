@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { VueDraggable } from 'vue-draggable-plus'
-import { ref, computed, } from 'vue';
+import { ref, computed, watch} from 'vue';
 import { nodesType, leftTreeProps, leftTreeEmits } from './dragForm'
 import dragTree from './dragTree.vue';
 import Switcher from '../../internal-icon/Switcher';
@@ -21,6 +21,8 @@ const list = computed({
     emit('updateLeftTree', val)
   }
 })
+
+
 
 
 const collapse = ref(false);
@@ -90,19 +92,30 @@ const chooseNode = (node: nodesType) => {
  * @description 触发添加节点事件
  */
 
- const addSchema = (node: nodesType) => {
-   emit('addSchema', node);
+ const createNode = (node: nodesType) => {
+   emit('addSchema', node, parentNode.value!);
  }
 
- /** 
-  * @description: 触发定义组件事件
-  * @param {nodesType} node - 节点数据
-  * 
-**/
+
+
 const collapseCreateNode = ref(false); 
-const defineComponent = (node: nodesType) => {
-  /* 展开创建节点面板 */
-  collapseCreateNode.value = true;
+/** 
+ * @description: 切换创建节点面板的展开/关闭状态
+**/
+const changeCollapse = () => {
+  collapseCreateNode.value = !collapseCreateNode.value;
+  return;
+}
+
+/** 
+ * @description: 打开创建节点面板
+ * @param {nodesType} node - 节点数据
+ * @return {void}
+  */
+ const parentNode = ref<nodesType>();
+const openCreatePanel = (node: nodesType) => {
+  parentNode.value = node;
+  changeCollapse();
 }
 
 
@@ -131,23 +144,29 @@ const defineComponent = (node: nodesType) => {
                 >
                   <Switcher />
                 </z-icon>
-              <span @click="defineComponent(node)">+</span>
+              <span @click="openCreatePanel(node)">+</span>
               </div>
               <div v-else-if="node.level === 2" :class="bem.e('second-level')"  @click="chooseNode(node)">
                 <span>{{node.label}}</span>
               </div>
             </slot>
           </div>
-          <dragTree  v-show="node.collapse" v-model:nodes="node.children">
-            <template #default="{node}">
-              <slot :node='node'></slot>
-            </template>
-          </dragTree>
+          <template v-show="node.collapse" v-if="node.children && node.children.length > 0">
+              <dragTree   v-model:nodes="node.children" >
+              <template #default="{node}">
+                <slot :node='node'></slot>
+              </template>
+            </dragTree>
+          </template>
+          
         </div>
       </VueDraggable>
     </div>
   </div>
-  <createNodePanel v-if="collapseCreateNode"></createNodePanel>
+  <template v-if="collapseCreateNode">
+    <createNodePanel  @cancelCreateNode="changeCollapse" @createNode="createNode" ></createNodePanel>
+  </template>
+ 
 </template>
 
 <style lang='scss' scoped>

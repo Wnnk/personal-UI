@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { createUuid } from '@commonUI/utils/createUuid';
-import { dragFormProps, dragFormEmits, SchemaType } from './dragForm';
+import { dragFormProps, dragFormEmits, SchemaType, componentProps } from './dragForm';
 import dragTree from './dragTree.vue';
 import dragPanel from './dragPanel.vue';
 import dragConfig from './dragConfig.vue';
@@ -135,20 +135,18 @@ const formData = ref([])
  * @description 新增表单数据
  * 
   */
- const addSchema = (schema: any) => {
-  console.log('新增表单数据',schema)
+ const addSchema = (schema: any, parentNode: any) => {
   for (const node of nodes.value) {
-    if(node.id === schema.id) {
+    if (node.id === parentNode.id) {
       node.children.push({
         id: createUuid(),
-        label: '新增字段',
-        type:  'radio',
+        ...schema,
         level: 2,
         collapse: false,
-        
       })
     }
   }
+  console.log(nodes.value)
  }
 
 /** 
@@ -165,14 +163,18 @@ const formData = ref([])
   * 
    */
  const createSchema = (item: any) => {
-    const schema = {
-     id: createUuid(),
-     width: '200px',
-     component: `${item.type}Display`,
-     componentProps: {
-       label: item.label,
-     },
-     componentType: item.type,
+   const schema = { 
+    id:item.id,
+    componentType:item.type,
+    width:item.width,
+    component: `${item.type}Display`,
+    componentProps: {
+      label:item.label,
+      value:item.value,
+      options:item.options,
+      min:item.min,
+      max:item.max,
+    }
    }
    return schema;
 
@@ -182,17 +184,45 @@ const formData = ref([])
  * @description 更新表单
   **/
  const changeFormItemData = (data: any) => {
+  console.log(formConfig.value.schemas);
+  console.log(data.data);
   formConfig.value.schemas.push(createSchema(data.data));
-  console.log('更新表单',formConfig.value.schemas)
+  // console.log('更新表单',formConfig.value.schemas)
  }
 
 
+/** 
+ * @description 添加树的一级节点(模块)
+ * 
+  */
+ const moduleName = ref('');
+ const addTreeModule = () => {
+  const node = {
+    id: createUuid(),
+    label: moduleName.value,
+    level: 1,
+    collapse: false,
+    children: [],
+  }
+  nodes.value.push(node);
+  moduleName.value = '';
+  return
+ }
 </script>
 
 
 <template>
   <div :class="[bem.b()]">
-    <dragTree v-model:nodes="nodes" @addSchema="addSchema"/>
+    <div class="treeModel">
+      <div>
+        <input type="text" v-model="moduleName" placeholder="请输入模块名称" />
+        <button @click="addTreeModule">添加模块</button>
+      </div>
+      <dragTree v-model:nodes="nodes" @addSchema="addSchema"/>
+    </div>
+   
+
+    
     <dragPanel 
       :formConfig="formConfig" 
       :currentItem="formConfig.currentItem"

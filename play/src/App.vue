@@ -116,51 +116,64 @@ const handleClick = (e:MouseEvent) => {
 /** 
  * @description 拖拽表单数据测试
 **/
-const dragData = ref<nodesType[]>([
-  {
-    label: '输入框',
-    id: '1',
-    dragType: 'input',
-  },
-  {
-    label: '下拉框',
-    id: '2',
-    dragType: 'select',
-    options:[
-      {
-        label: '选项1',
-        value: '1'
-      },
-      {
-        label: '选项2',
-        value: '2'
-      }
-    ]
+// const dragData = ref<nodesType[]>([
+//   {
+//     label: '输入框',
+//     id: '1',
+//     dragType: 'input',
+//   },
+//   {
+//     label: '下拉框',
+//     id: '2',
+//     dragType: 'select',
+//     options:[
+//       {
+//         label: '选项1',
+//         value: '1'
+//       },
+//       {
+//         label: '选项2',
+//         value: '2'
+//       }
+//     ]
 
-  },
-  {
-    label: '单选框',
-    id: '3',
-    dragType: 'radio',
-    value: '1',
-  }
-])
-const dragData2 = ref<nodesType[]>([
-  {
-    id:'10',
-    label: '输入框',
-    dragType: 'input',
-  },
-  {
-    id:'20',
-    label: '下拉框',
-    dragType:'select',
-  }
-])
+//   },
+//   {
+//     label: '单选框',
+//     id: '3',
+//     dragType: 'radio',
+//     value: '1',
+//   }
+// ])
+// const dragData2 = ref<nodesType[]>([
+//   {
+//     id:'10',
+//     label: '输入框',
+//     dragType: 'input',
+//   },
+//   {
+//     id:'20',
+//     label: '下拉框',
+//     dragType:'select',
+//   }
+// ])
 
-watch(dragData, (newVal, oldVal) => {
-  console.log('dragData', newVal, oldVal)
-})
+/* timeAgo */
+const dict = {
+  justNow: '刚刚1',
+  minuteAgo: '1 分钟前1',
+  minutesAgo: '分钟前1',
+  hourAgo: '1 小时前1',
+  hoursAgo: '小时前1',
+  yesterday: '昨天',
+  daysAgo: '天前1',
+  lastWeek: '上周1',
+  weeksAgo: '周前1',
+  lastMonth: '上个月1',
+  monthsAgo: '个月前1',
+  lastYear: '去年1',
+  yearsAgo: '年前1'
+}
 </script>
 
 <template>
@@ -207,7 +220,7 @@ watch(dragData, (newVal, oldVal) => {
       </template>
       按钮
     </z-button> -->
-    <z-input> 
+    <!-- <z-input> 
       <template #prepend>prepend</template> 
       <template #prefixIcon>
         <z-icon>
@@ -220,10 +233,13 @@ watch(dragData, (newVal, oldVal) => {
         </z-icon>
       </template>
       <template #append>append</template>
-    </z-input>
+    </z-input> -->
     <!-- <z-time-ago :Date="new Date()"></z-time-ago> -->
 
-    <z-drag-form v-model:left-tree="dragData" :panel-value="dragData2"></z-drag-form>
+    <!-- <z-drag-form v-model:left-tree="dragData" :panel-value="dragData2"></z-drag-form> -->
+
+    <z-time-ago :date="1722955863295" lang="en_US" ></z-time-ago>
+    <z-select></z-select>
   </div>
  <!-- 
   v-model: 

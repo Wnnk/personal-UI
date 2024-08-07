@@ -57,9 +57,9 @@ export const leftTreeProps = {
 
 export const leftTreeEmits = {
   "updateLeftTree": (value: any) => value,
-  "addSchema": (value: any) => {
-    return value;
-  },
+  "addSchema": (value: any , parentNode: nodesType) => {
+    return { value, parentNode }
+  }
 }
 
 
@@ -182,6 +182,20 @@ export const itemStatusProps = {
   }
 }
 
+
+/** 
+ * @description createNodePanel
+ * 
+**/
+
+export const createNodePanelProps = {
+
+}
+
+export const createNodePanelEmits = {
+  "cancelCreateNode": () => {},
+  "createNode": (value: any  ) => value,
+}
 
 
 

@@ -1,0 +1,22 @@
+@use  'mixins/mixins.scss' as *;
+
+
+@include b("timeago") {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  @include e("line") {
+    flex-grow: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(228, 224, 224, 0.5) 50%, transparent 50%);
+    background-size: 10px 1px;
+    margin: 0 10px;
+    
+  }
+
+  @include e("content") {
+
+  }
+}
