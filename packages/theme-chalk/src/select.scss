@@ -42,5 +42,15 @@
       transform: rotate(-180deg);
     }
   }
+
+  @include e(options){
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    border: 1px solid #dcdfe6;
+    border-radius: 2px;
+
+  }
 }
 

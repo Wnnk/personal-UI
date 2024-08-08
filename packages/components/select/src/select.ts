@@ -6,7 +6,7 @@ export const selectProps = {
     type: Boolean,
     default: false
   },
-  value: {
+  modelValue: {
     type: [Boolean, String, Number],
     required: true
   },
@@ -26,4 +26,8 @@ export const selectProps = {
     type: String,
     default: "请选择"
   },
+}
+
+const selectEmits = {
+  "update:modelValue": (value: any) => true,
 }

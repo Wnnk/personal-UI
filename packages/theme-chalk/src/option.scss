@@ -1,0 +1,18 @@
+@use  'mixins/mixins.scss' as *;
+
+@include b(option) {
+  width: 100%;
+  @include when(disabled){
+    cursor: not-allowed;
+  }
+  &:hover{
+    background-color: #f5f7fa;
+    color: #606266;
+  }
+  @include e(optionItem){
+    @include when(disabled){
+      color: #A8ABB2;
+    }
+  }
+ 
+}

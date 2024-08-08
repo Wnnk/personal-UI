@@ -159,21 +159,47 @@ const handleClick = (e:MouseEvent) => {
 // ])
 
 /* timeAgo */
-const dict = {
-  justNow: '刚刚1',
-  minuteAgo: '1 分钟前1',
-  minutesAgo: '分钟前1',
-  hourAgo: '1 小时前1',
-  hoursAgo: '小时前1',
-  yesterday: '昨天',
-  daysAgo: '天前1',
-  lastWeek: '上周1',
-  weeksAgo: '周前1',
-  lastMonth: '上个月1',
-  monthsAgo: '个月前1',
-  lastYear: '去年1',
-  yearsAgo: '年前1'
-}
+// const dict = {
+//   justNow: '刚刚1',
+//   minuteAgo: '1 分钟前1',
+//   minutesAgo: '分钟前1',
+//   hourAgo: '1 小时前1',
+//   hoursAgo: '小时前1',
+//   yesterday: '昨天',
+//   daysAgo: '天前1',
+//   lastWeek: '上周1',
+//   weeksAgo: '周前1',
+//   lastMonth: '上个月1',
+//   monthsAgo: '个月前1',
+//   lastYear: '去年1',
+//   yearsAgo: '年前1'
+// }
+
+/* select */
+const selectValue = ref('');
+const options = [
+  {
+    value: 'Option1',
+    label: 'Option1',
+    disabled:true,
+  },
+  {
+    value: 'Option2',
+    label: 'Option2',
+  },
+  {
+    value: 'Option3',
+    label: 'Option3',
+  },
+  {
+    value: 'Option4',
+    label: 'Option4',
+  },
+  {
+    value: 'Option5',
+    label: 'Option5',
+  },
+]
 </script>
 
 <template>
@@ -238,8 +264,16 @@ const dict = {
 
     <!-- <z-drag-form v-model:left-tree="dragData" :panel-value="dragData2"></z-drag-form> -->
 
-    <z-time-ago :date="1722955863295" lang="en_US" ></z-time-ago>
-    <z-select></z-select>
+    <!-- <z-time-ago :date="1722955863295" lang="en_US" ></z-time-ago> -->
+    <z-select v-model="selectValue">
+      <z-option 
+        v-for="option in options" 
+        :key="option.value" 
+        :value="option.value" 
+        :label="option.label" :disabled="option.disabled"
+        >
+      </z-option>
+    </z-select>
   </div>
  <!-- 
   v-model: 
