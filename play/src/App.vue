@@ -176,8 +176,8 @@ const handleClick = (e:MouseEvent) => {
 // }
 
 /* select */
-const selectValue = ref('');
-const options = [
+const selectValue = ref<string[] | number[]>([]);
+const options = ref([
   {
     value: 'Option1',
     label: 'Option1',
@@ -199,94 +199,19 @@ const options = [
     value: 'Option5',
     label: 'Option5',
   },
-]
+])
+const changeOptions = (res:any) => {
+  options.value = res
+}
 </script>
 
 <template>
   <div class="app">
-    <!-- <z-icon :size="50" >     
-      <AddCircle ></AddCircle>
-    </z-icon>
-    <z-icon :size="50" :color="'blue'"><AddCircle ></AddCircle></z-icon> -->
-   
-    <!--  
-      :label-field="'label'" 
-      key-field="key" 
-      hildren-field="children"
-      :default-expanded-keys="['41', '4130']" 
+    <z-select v-model="selectValue" :options="options" @update:options="changeOptions" :multiple="true" :multiple-limit="6">
       
-    -->
-    <!-- selectable 可选节点 multiple 多选节点 selected-key 选中节点-->
-    <!-- {{ value }}
-    <z-tree 
-      :data="treeData" 
-      :on-load ="handleLoad"
-      v-model:selected-keys="value"
-      selectable
-      :default-checked-keys="['40']"
-      show-checkbox
-      >
-      <template #default="{ node }">
-        {{ node.key }} - {{ node.label }}
-      </template>
-    </z-tree>
-    <z-button 
-      size="medium" 
-      type="danger" 
-      :round="true"  
-      :disabled="false"
-      icon-placement="left"
-      @click="handleClick"
-      @mousedown="handleClick"
-    >
-      <template #icon>
-        <z-icon>
-          <AddCircle></AddCircle>
-        </z-icon>
-      </template>
-      按钮
-    </z-button> -->
-    <!-- <z-input> 
-      <template #prepend>prepend</template> 
-      <template #prefixIcon>
-        <z-icon>
-          <AddCircle></AddCircle>
-        </z-icon>
-      </template>
-      <template #suffixIcon>
-        <z-icon>
-          <AddCircle></AddCircle>
-        </z-icon>
-      </template>
-      <template #append>append</template>
-    </z-input> -->
-    <!-- <z-time-ago :Date="new Date()"></z-time-ago> -->
-
-    <!-- <z-drag-form v-model:left-tree="dragData" :panel-value="dragData2"></z-drag-form> -->
-
-    <!-- <z-time-ago :date="1722955863295" lang="en_US" ></z-time-ago> -->
-    <z-select v-model="selectValue">
-      <z-option 
-        v-for="option in options" 
-        :key="option.value" 
-        :value="option.value" 
-        :label="option.label" :disabled="option.disabled"
-        >
-      </z-option>
     </z-select>
   </div>
- <!-- 
-  v-model: 
-  disabled
-  indeterminate
-  label
-  change 
- -->
-  <!-- <z-checkbox 
-    label='节点'
-    @change="handleChange"
-  >
-  </z-checkbox> -->
+
 </template>
 
 <style scoped lang="scss"> 

@@ -12,9 +12,10 @@ export const OptionProps = {
   disabled:{
     type:Boolean,
     default: false,
-  }  
+  },
+
 }
 
 export const OptionEmits = {
-  'update:modelValue': (value: string | number) => true,
+  'option-selected': (value: string | number) => value,
 }

@@ -1,14 +1,19 @@
 import {  PropType,ExtractPropTypes } from "vue"; 
 
 export type Size = "small" | "medium" | "large"
+export type Option = {
+  label: string,
+  value: string | number,
+  disabled?: boolean,
+}
 export const selectProps = {
   multiple: {
     type: Boolean,
     default: false
   },
   modelValue: {
-    type: [Boolean, String, Number],
-    required: true
+    type: [String, Number, Array] as PropType<string | number | (string | number)[]>,
+    required: true,
   },
   disabled: {
     type: Boolean,
@@ -26,8 +31,29 @@ export const selectProps = {
     type: String,
     default: "请选择"
   },
+  url:{
+    type: String,
+  },
+  autoLoad: {
+    type: Boolean,
+    default: false
+  },
+  api:{
+    type: Function,
+    default: null
+  },
+  options:{
+    type: Array as PropType<Option[]>,
+    required: true,
+    default: () => []
+  },
+  lazy:{
+    type: Boolean,
+    default: false
+  },
 }
 
-const selectEmits = {
-  "update:modelValue": (value: any) => true,
+export const selectEmits = {
+  "update:modelValue": (value: any) => value,
+  "update:options": (options: Option[]) => options,
 }
