@@ -23,7 +23,6 @@ const handleChoosedOption = (value:any) => {
 </script>
 
 <template>
- 
   <div :class="[bem.b(),bem.is('disabled', props.disabled)]" @click="handleChoosedOption(props.value)">
     <span :class="[bem.e('optionItem'),bem.is('disabled', props.disabled)]">{{props.label}}</span>
   </div>

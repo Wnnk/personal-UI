@@ -31,9 +31,6 @@ export const selectProps = {
     type: String,
     default: "请选择"
   },
-  url:{
-    type: String,
-  },
   autoLoad: {
     type: Boolean,
     default: false
@@ -44,7 +41,6 @@ export const selectProps = {
   },
   options:{
     type: Array as PropType<Option[]>,
-    required: true,
     default: () => []
   },
   lazy:{

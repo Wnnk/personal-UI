@@ -203,11 +203,37 @@ const options = ref([
 const changeOptions = (res:any) => {
   options.value = res
 }
+const useApi = async() => {
+
+  try {
+    const response = await fetch('https://mock.presstime.cn/mock/66b9f2d18b18b22c21d33bf7/ui/select');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data.data
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+  }
+
+  
+  
+}
 </script>
 
 <template>
   <div class="app">
-    <z-select v-model="selectValue" :options="options" @update:options="changeOptions" :multiple="true" :multiple-limit="6">
+    <z-select 
+      v-model="selectValue" 
+      :options="options"
+      @update:options="changeOptions" 
+      :multiple="true" 
+      :multiple-limit="6"
+      size="medium"
+      :autoLoad="true"
+      :api="useApi"
+      :lazy="true"
+      >
       
     </z-select>
   </div>

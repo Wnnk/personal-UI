@@ -16,15 +16,19 @@ const isFocus = ref(false);
 const emits = defineEmits(selectEmits);
 const changeSelect = () => {
   isFocus.value =!isFocus.value;
+  if (props.lazy) {
+    loadData();
+  }
 };
 /* 0:未初始化, 1:加载中 2:加载完成 3:加载失败 */
 const status = ref(0);
+
 /** 
  * @description: 异步加载数据
  * 
 **/
 const loadData = async () => {
-  if(!props.autoLoad || props.api === null) return;
+  if(props.api === null || status.value === 1) return;
   try {
     status.value = 1;
     const result = await props.api();
@@ -32,6 +36,8 @@ const loadData = async () => {
     status.value = 2;
   } catch (error) {
     status.value = 3;
+    console.error(error);
+
   }
 }
 
@@ -67,14 +73,16 @@ const deleteOption = (index: number) => {
 }
 
 onMounted(() => {
-  loadData();
+  if (!props.lazy) {
+    loadData();
+  }
 });
 
 
 </script>
 
 <template>
-  <div :class="[bem.b(), bem.is('is-focus', isFocus)]"  >
+  <div :class="[bem.b(), bem.is('is-focus', isFocus)]"  :style="{ height: props.size === 'small' ? '40px' : props.size === 'medium' ? '48px' : '56px' }">
     <!-- 单选模式 --> 
     <div :class="[bem.e('input')]" v-if="props.multiple === false">{{ props.modelValue === '' ? props.placeholder : props.modelValue }}</div>
     <!-- 多选模式 -->
@@ -96,7 +104,7 @@ onMounted(() => {
        </z-option>
     </div>
   </div>
-  
+
 </template>
 
 <style lang='scss' scoped>
