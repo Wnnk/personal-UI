@@ -1,0 +1,33 @@
+@use  '../mixins/mixins.scss' as *;
+
+@include b(table-body) {
+ overflow: hidden;
+ position: relative;
+ flex:1;
+
+  @include e(body){
+    // display: table-row-group;
+    border-color: inherit;
+    border-collapse: collapse; /* 取消边框 */
+  }
+
+  @include e(row){
+   background-color: #fff;
+    &:hover{
+      background-color: rgb(144,147,153,0.05);
+    }
+  }
+
+  @include e(table-cell){
+    display: table-cell;
+    text-align: left;
+
+  }
+
+  
+
+}
+
+
+
+

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
-import { ref, watch} from 'vue'
+import { onMounted, ref, watch} from 'vue'
 import { TreeOption, Key } from '@commonUI/components/tree/index'
 import {groupType,nodesType} from '@commonUI/components/drag-form/src/dragForm'
 const createData = (level: number = 4, parentKey:string = ''):any => {
@@ -215,10 +215,35 @@ const useApi = async() => {
   } catch (error) {
     console.error('There has been a problem with your fetch operation:', error);
   }
-
-  
-  
 }
+
+const tableData = [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+]
+
+
+onMounted(() => {
+  
+})
 </script>
 
 <template>
@@ -233,9 +258,14 @@ const useApi = async() => {
       :autoLoad="true"
       :api="useApi"
       :lazy="true"
-      >
-      
+      > 
     </z-select>
+
+    <z-table :data="tableData" style="width: 100%;">
+      <z-table-column prop="data"  width="180"  label="Date11111111111111111111111111111111111111111111111111111"/>
+      <z-table-column prop="name" label="Name" width="150" />
+      <z-table-column prop="address" label="Address" /><!-- 自动计算宽度 -->
+    </z-table>
   </div>
 
 </template>

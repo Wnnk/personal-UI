@@ -1,0 +1,45 @@
+@use  '../mixins/mixins.scss' as *;
+
+@include b(table-header) {
+  overflow: hidden;
+  flex-shrink: 0;
+  width: 100%;
+  @include e(header){
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+  
+  @include e(thead){
+    color: #909399;
+    box-sizing: border-box;
+  }
+
+  @include e(table-cell) {
+    padding: 8px 0;
+    min-width: 0;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    position: relative;
+    text-align: left;
+    z-index: 1;
+    border-bottom: 1px solid #EBEEF5;
+  }
+
+  @include e(cell){
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 23px;
+    padding: 0 12px;
+  }
+  
+}
+
+
+
+
+
+
