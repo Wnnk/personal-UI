@@ -9,8 +9,11 @@ export const tableProps = {
     default: () => [],
     required: true
   },
-  width: {
+  border: {
+    boolean: true,
+    default: false
+  },
+  height: {
     type: String,
-    default: '100%'
   }
 }

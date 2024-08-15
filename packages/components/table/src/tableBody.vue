@@ -24,12 +24,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="[bem.b()]" ref="tableBodyRef">
-    <table :class="[bem.e('body') ]"  ref="tableRef">
+  <div :class="[bem.b()]" ref="tableBodyRef" >
+    <div :class="[bem.e('scrollbar')]">
+      <table :class="[bem.e('body') ]"  ref="tableRef">
       <colgroup><slot></slot></colgroup>
       <tbody>
         <tr :class="[bem.e('row')]" v-for="(item, index) in props.data" :key="index" >
-          <td :class="[bem.e('table-cell')]" v-for="prop in item" :key="prop">
+          <td :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="prop in item" :key="prop">
             <div :class="[bem.e('cell')]">
               {{ prop }}
             </div>
@@ -37,6 +38,8 @@ onUnmounted(() => {
         </tr>
       </tbody>
     </table>
+    </div>
+    
     
   </div>
 </template>

@@ -261,7 +261,7 @@ onMounted(() => {
       > 
     </z-select>
 
-    <z-table :data="tableData" style="width: 100%;">
+    <z-table :data="tableData" style="width: 100%;" :border="false" height="150">
       <z-table-column prop="data"  width="180"  label="Date11111111111111111111111111111111111111111111111111111"/>
       <z-table-column prop="name" label="Name" width="150" />
       <z-table-column prop="address" label="Address" /><!-- 自动计算宽度 -->

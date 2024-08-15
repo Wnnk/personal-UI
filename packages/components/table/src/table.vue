@@ -22,13 +22,13 @@ const innerWidth = ref(0);
 </script>
 
 <template>
-  <div :class="[bem.b()]" :style="{width: props.width}">
+  <div :class="[bem.b()]" >
     <div :class="[bem.e('table-fit')]">
-      <div :class="[bem.e('table-inner')]" >
-        <tableHeader>
+      <div :class="[bem.e('table-inner')]" :style="{ height: `${props.height}px`}">
+        <tableHeader :border="props.border">
           <slot></slot>
         </tableHeader>
-        <tableBody :data="props.data" >
+        <tableBody :data="props.data" :border="props.border">
           <slot></slot>
         </tableBody >
       </div>

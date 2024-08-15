@@ -1,9 +1,10 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import {tableHeaderProps} from './tableHeader'
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, provide, ref } from 'vue';
 const bem = createNamespace('table-header');
-const props = defineProps(tableHeaderProps)
+const props = defineProps(tableHeaderProps);
+
 const columns = [
   {
     label: 'Name',
@@ -35,6 +36,7 @@ const initWidth = () => {
   if (tableRef.value && tableHeaderRef.value) {
     requestAnimationFrame(() => {
       (tableRef.value as HTMLDivElement).style.width = `${(tableHeaderRef.value as HTMLDivElement).offsetWidth}px`;
+    
     })
   }
 }
@@ -53,17 +55,16 @@ onUnmounted(() => {
   <div :class="[bem.b()]" ref="tableHeaderRef">
     <table :class="[bem.e('header')]" ref="tableRef">
       <colgroup>
-        <slot></slot>
+        <slot ></slot>
       </colgroup>
       <thead :class="[bem.e('thead')]">
         <tr :class="[bem.e('tr')]">
-          <th :class="[bem.e('table-cell')]" v-for="column in columns" :key="column.key" >
+          <th :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="column in columns" :key="column.key" >
             <div :class="[bem.e('cell')]">{{ column.label }}</div>
           </th>
         </tr>
       </thead>
     </table>
-    
   </div>
  
 </template>

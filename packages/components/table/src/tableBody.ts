@@ -4,4 +4,9 @@ export const tableBodyProps = {
     type: Array,
     default: () => []
   },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  
 }

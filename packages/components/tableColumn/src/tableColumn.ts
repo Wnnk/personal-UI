@@ -5,6 +5,14 @@ export const columnProps = {
     type: String,
     default: ""
   },
+  type: {
+    type: String,
+    default:'',
+  },
+  width: {
+    type: String,
+    default: ""
+  },
 }
 
 export const columnEmits =  {

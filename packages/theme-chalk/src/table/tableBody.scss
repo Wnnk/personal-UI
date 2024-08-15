@@ -5,6 +5,29 @@
  position: relative;
  flex:1;
 
+ @include e('scrollbar') {
+  overflow: auto;
+  position: relative;
+  height: 100%;
+  /* 滚动条 */
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #0003;
+    border-radius: 10px;
+    transition: all .2s ease-in-out;
+  }
+
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+ }
+
+
   @include e(body){
     // display: table-row-group;
     border-color: inherit;
@@ -21,8 +44,30 @@
   @include e(table-cell){
     display: table-cell;
     text-align: left;
-
+    padding: 8px 0;
+    min-width: 0;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    position: relative;
+    text-align: left;
+    z-index: 1;
+    border-bottom: 1px solid #ebeef5;
+    @include when(border) {
+     border:  1px solid #ebeef5;
+    }
+  
   }
+  @include e(cell) {
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 23px;
+    padding: 0 12px;
+  }
+
 
   
 
