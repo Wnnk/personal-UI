@@ -41,7 +41,41 @@
   
 }
 
-
+.caret-wrapper{
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  height: 14px;
+  width: 24px;
+  vertical-align: middle;
+  cursor: pointer;
+  overflow: initial;
+  position: relative;
+}
+.asc{
+  width: 0;
+  height: 0;
+  border: solid 5px transparent;
+  position: absolute;
+  left: 7px;
+  border-bottom-color: #a8abb2;
+  top: -5px;
+}
+.desc {
+  width: 0;
+  height: 0;
+  border: solid 5px transparent;
+  position: absolute;
+  left: 7px;
+  border-top-color: #a8abb2;
+  bottom: -3px;
+}
+.is-asc{
+  border-bottom-color: #409eef;
+}
+.is-desc {
+  border-top-color: #409eef;
+}
 
 
 

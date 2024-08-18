@@ -7,6 +7,8 @@ const bem = createNamespace('table-body');
 const props = defineProps(tableBodyProps);
 const tableBodyRef = ref<HTMLDivElement>();
 const tableRef = ref<HTMLTableElement>();
+
+
 const initWidth = () => {
   if (tableBodyRef.value && tableRef.value) {
     requestAnimationFrame(() => {
@@ -27,7 +29,9 @@ onUnmounted(() => {
   <div :class="[bem.b()]" ref="tableBodyRef" >
     <div :class="[bem.e('scrollbar')]">
       <table :class="[bem.e('body') ]"  ref="tableRef">
-      <colgroup><slot></slot></colgroup>
+      <colgroup>
+        <col v-for="col in props.columns" :key="col.label" :style="{width: `${col.width}px`}">
+      </colgroup>
       <tbody>
         <tr :class="[bem.e('row')]" v-for="(item, index) in props.data" :key="index" >
           <td :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="prop in item" :key="prop">

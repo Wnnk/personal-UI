@@ -1,33 +1,13 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
-import {tableHeaderProps} from './tableHeader'
+import { tableHeaderProps, SortType, tableHeaderEmits } from './tableHeader'
 import { onMounted, onUnmounted, provide, ref } from 'vue';
+
+
+
 const bem = createNamespace('table-header');
 const props = defineProps(tableHeaderProps);
-
-const columns = [
-  {
-    label: 'Name',
-    key: 'name',
-    width: 150,
-    align: 'left' as const,
-    sortable: true,
-  },
-  {
-    label: 'Age',
-    key: 'age',
-    width: 100,
-    align: 'center' as const,
-    sortable: true,
-  },
-  {
-    label: 'Address',
-    key: 'address',
-    width: 200,
-    align: 'right' as const,
-    sortable: true,
-  },
-]
+const emits = defineEmits(tableHeaderEmits);
 
 const tableRef = ref<HTMLTableElement>();
 const tableHeaderRef = ref<HTMLDivElement>();
@@ -47,8 +27,13 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', initWidth);
 })
+const sortType = ref<SortType>('');
 
-
+const changeSortType = (type: SortType, prop: any) => {
+  if (type === sortType.value) return;
+  sortType.value = type;
+  emits('toggleSort',  type, prop );
+}
 </script>
 
 <template>
@@ -59,8 +44,14 @@ onUnmounted(() => {
       </colgroup>
       <thead :class="[bem.e('thead')]">
         <tr :class="[bem.e('tr')]">
-          <th :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="column in columns" :key="column.key" >
-            <div :class="[bem.e('cell')]">{{ column.label }}</div>
+          <th :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="column in props.columns" :key="column.prop" >
+            <div :class="[bem.e('cell')]">
+              {{ column.label }}
+              <span class="caret-wrapper" v-if="column.sort">
+                <i :class="['asc', sortType === 'asc'? 'is-asc' : '']" @click="changeSortType('asc', column.prop)"></i>
+                <i :class="['desc', sortType === 'desc'? 'is-desc' : '']" @click="changeSortType('desc', column.prop)"></i>
+              </span>
+            </div>
           </th>
         </tr>
       </thead>

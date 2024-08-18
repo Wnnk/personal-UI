@@ -13,6 +13,15 @@ export const columnProps = {
     type: String,
     default: ""
   },
+  sort: {
+    type: Boolean,
+    default: false
+  },
+  prop: {
+    type: String,
+    required: true,
+  }
+
 }
 
 export const columnEmits =  {
