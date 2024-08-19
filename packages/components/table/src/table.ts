@@ -15,5 +15,9 @@ export const tableProps = {
   },
   height: {
     type: String,
-  }
+  },
+  multiple: {
+    type: Boolean,
+    default: false
+  },
 }

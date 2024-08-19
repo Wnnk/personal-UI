@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { tableHeaderProps, SortType, tableHeaderEmits } from './tableHeader'
-import { onMounted, onUnmounted, provide, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 
 
@@ -27,8 +27,14 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', initWidth);
 })
-const sortType = ref<SortType>('');
 
+
+const sortType = ref<SortType>('');
+/** 
+ * @description: 切换排序类型
+ * @param {SortType} type 排序类型
+ * @param {any} prop 排序属性
+  */
 const changeSortType = (type: SortType, prop: any) => {
   if (type === sortType.value) return;
   sortType.value = type;

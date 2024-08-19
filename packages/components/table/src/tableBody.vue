@@ -1,14 +1,33 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
-import { tableBodyProps } from './tableBody'
+import { tableBodyProps, tableBodyEmits } from './tableBody'
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const bem = createNamespace('table-body');
 const props = defineProps(tableBodyProps);
+const emits = defineEmits(tableBodyEmits);
+
+
+
+/**
+ *  @description:选中行 
+ *  @param {number} index 行索引 
+ *  @param {row} 行数据 
+ * 
+**/
+const selectRow = (index: number, row: any) => {
+  emits('toggleSelection',index, row)
+}
+
+
+
+
+/** 
+ * @description: 初始化宽度
+ * 
+**/
 const tableBodyRef = ref<HTMLDivElement>();
 const tableRef = ref<HTMLTableElement>();
-
-
 const initWidth = () => {
   if (tableBodyRef.value && tableRef.value) {
     requestAnimationFrame(() => {
@@ -33,7 +52,7 @@ onUnmounted(() => {
         <col v-for="col in props.columns" :key="col.label" :style="{width: `${col.width}px`}">
       </colgroup>
       <tbody>
-        <tr :class="[bem.e('row')]" v-for="(item, index) in props.data" :key="index" >
+        <tr :class="[bem.e('row'), bem.is('selected', props.selectionRows!.includes(index))]" v-for="(item, index) in props.data" :key="index" @click="selectRow(index,item)">
           <td :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="prop in item" :key="prop">
             <div :class="[bem.e('cell')]">
               {{ prop }}

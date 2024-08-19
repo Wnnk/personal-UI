@@ -39,6 +39,10 @@
     &:hover{
       background-color: rgb(144,147,153,0.05);
     }
+
+    @include when(selected){
+      background-color: rgb(240, 249, 235);
+    }
   }
 
   @include e(table-cell){

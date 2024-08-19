@@ -19,6 +19,17 @@ export const tableBodyProps = {
   columns: {
     type: Array as PropType<ColumnsType[]>,
     default: () => []
+  },
+  selectionRows: {
+    type: Array as PropType<number[]>,
+    required: true,
   }
-  
+
+}
+
+
+export const tableBodyEmits = {
+  'toggleSelection':(index:number,row:any,) => {
+    return {index,row}
+  }
 }

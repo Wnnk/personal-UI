@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
-import { provide, ref} from 'vue';
+import { onMounted, provide, ref} from 'vue';
 import { tableProps } from './table'
 import tableHeader from './tableHeader.vue';
 import tableBody from './tableBody.vue';
@@ -15,8 +15,6 @@ provide('getColumns', getColumns);
 const bem = createNamespace('table');
 const props = defineProps(tableProps)
 
-
-
 defineOptions({
   name:'z-table',
 })
@@ -26,6 +24,12 @@ const innerWidth = ref(0);
 
 const tableRenderData = ref<any>([]);
 tableRenderData.value = props.data;
+
+/** 
+ * @description: 更新排序
+ * @param {string} type 排序类型
+ * @param {string} prop 排序属性
+**/
 const updateColumn = (type: string, prop: string) => {
 
   if (type === 'asc') {
@@ -57,9 +61,46 @@ const updateColumn = (type: string, prop: string) => {
     })
    
   }
-  console.log(tableRenderData.value)
+  return;
 }
 
+
+/* 多选 */
+const isMultiple = ref(false);
+const selectionRows = ref<number[]>([]);
+isMultiple.value = props.multiple;
+/** 
+ *  @description: 选中或取消选中某一行
+ *  @param {number} index 行索引
+ *  @param {row} row 行数据
+ **/
+
+const toggleSelection = (index: number, row: any) => {
+  if (isMultiple.value) {
+    /* 多选 */
+    if (!selectionRows.value.includes(index)) {
+      /* 点击未选中行 */
+      selectionRows.value.push(index);
+    } else {
+      /* 点击已选中行 */
+      selectionRows.value.splice(selectionRows.value.indexOf(index), 1);
+    }
+  } else {
+    /* 单选 */
+    if (!selectionRows.value.includes(index)) {
+      /* 点击未选中行 */
+      selectionRows.value = [index];
+    } else {
+      /* 点击已选中行 */
+      selectionRows.value = [];
+    }
+    
+  }
+}
+
+onMounted(() => {
+
+});
 
 
 </script>
@@ -71,7 +112,13 @@ const updateColumn = (type: string, prop: string) => {
         <tableHeader :border="props.border" :columns = "columns"  @toggle-sort="updateColumn">
           <slot ></slot>
         </tableHeader>
-        <tableBody :data="tableRenderData" :border="props.border" :columns = "columns"  >
+        <tableBody 
+          :data="tableRenderData" 
+          :border="props.border" 
+          :columns = "columns" 
+          @toggle-selection="toggleSelection"
+          :selection-rows="selectionRows"
+        >
         </tableBody >
       </div>
     </div>
