@@ -21,11 +21,11 @@ const initWidth = () => {
   }
 }
 onMounted(() => {
-  window.addEventListener('resize', initWidth);
-  initWidth()
+  // window.addEventListener('resize', initWidth);
+  // initWidth()
 })
 onUnmounted(() => {
-  window.removeEventListener('resize', initWidth);
+  // window.removeEventListener('resize', initWidth);
 })
 
 
@@ -66,7 +66,7 @@ const changeSortType = (type: SortType, prop: any, index: number) => {
 
 <template>
   <div :class="[bem.b()]" ref="tableHeaderRef">
-    <table :class="[bem.e('header')]" ref="tableRef">
+    <table :class="[bem.e('header')]" ref="tableRef" >
       <colgroup>
         <slot ></slot>
       </colgroup>

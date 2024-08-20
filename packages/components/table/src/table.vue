@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
-import { onMounted, provide, ref} from 'vue';
+import { onMounted, provide, ref, onBeforeMount} from 'vue';
 import { tableProps } from './table'
 import tableHeader from './tableHeader.vue';
 import tableBody from './tableBody.vue';
@@ -19,8 +19,8 @@ defineOptions({
   name:'z-table',
 })
 
-const tableInnerRef = ref();
-const innerWidth = ref(0);
+
+
 
 const tableRenderData = ref<any>([]);
 tableRenderData.value = props.data;
@@ -98,9 +98,12 @@ const toggleSelection = (index: number, row: any) => {
   }
 }
 
+
 onMounted(() => {
 
 });
+
+
 
 
 </script>
@@ -109,7 +112,7 @@ onMounted(() => {
   <div :class="[bem.b()]" >
     <div :class="[bem.e('table-fit')]">
       <div :class="[bem.e('table-inner')]" :style="{ height: `${props.height}px`}">
-        <tableHeader :border="props.border" :columns = "columns"  @toggle-sort="updateColumn">
+        <tableHeader :border="props.border" :columns = "columns"  @toggle-sort="updateColumn" ref="tableHeaderRef">
           <slot ></slot>
         </tableHeader>
         <tableBody 

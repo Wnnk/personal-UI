@@ -36,12 +36,13 @@ const initWidth = () => {
   }
 }
 onMounted (() => {
-  window.addEventListener('resize', initWidth);
-  initWidth();
+  // window.addEventListener('resize', initWidth);
+  // initWidth();
 });
 onUnmounted(() => {
-  window.removeEventListener('resize', initWidth);
+  // window.removeEventListener('resize', initWidth);
 });
+
 </script>
 
 <template>
@@ -51,19 +52,17 @@ onUnmounted(() => {
       <colgroup>
         <col v-for="col in props.columns" :key="col.label" :style="{width: `${col.width}px`}">
       </colgroup>
-      <tbody>
-        <tr :class="[bem.e('row'), bem.is('selected', props.selectionRows!.includes(index))]" v-for="(item, index) in props.data" :key="index" @click="selectRow(index,item)">
-          <td :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="prop in item" :key="prop">
+      <tbody :class="[bem.e('body-wrapper')]">
+        <tr :class="[bem.e('row'), bem.is('selected', props.selectionRows!.includes(index))]" v-for="(row, index) in props.data" :key="index" @click="selectRow(index,row)">
+          <td :class="[bem.e('table-cell'), bem.is('border', props.border)]" v-for="col in props.columns" rowspan="1" colspan="1">
             <div :class="[bem.e('cell')]">
-              {{ prop }}
+              {{ (row as any)[col.prop] }}
             </div>
           </td>
         </tr>
       </tbody>
     </table>
     </div>
-    
-    
   </div>
 </template>
 

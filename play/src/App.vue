@@ -221,17 +221,17 @@ const tableData = [
   {
     date: '2016-05-03',
     name: 'Tom',
-    address: 'No. 149, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
   },
   {
     date: '2016-05-02',
     name: 'Tom',
-    address: 'No. 119, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
   },
   {
     date: '2016-05-04',
     name: 'Tom',
-    address: 'No. 169, Grove St, Los Angeles',
+    address: 'No. 189, Grove St, Los Angeles',
   },
   {
     date: '2016-05-01',
@@ -261,10 +261,17 @@ onMounted(() => {
       > 
     </z-select>
 
-    <z-table :data="tableData" style="width: 100%;" :border="false" height="300" :multiple="false">
-      <z-table-column prop="date"  width="180"  label="Date" :sort="true"/>
-      <z-table-column prop="name" label="Name" width="150" />
-      <z-table-column prop="address" label="Address" :sort="true"/><!-- 自动计算宽度 -->
+    <z-table :data="tableData"  :border="false" height="300" :multiple="false">
+      <z-table-column label="Name" prop="name" width="180"/>
+      <z-table-column label="Date" prop="Date" width="180"/>
+      <z-table-column label="Address" prop="address" width="180"/>
+      <z-table-column label="City" prop="city" width="180"/>
+      <z-table-column label="Address" prop="address" width="180"/>
+      <z-table-column label="Name1" prop="name" width="180"/>
+      <z-table-column label="Name2" prop="name" width="180"/>
+      <z-table-column label="Name3" prop="name" width="180"/>
+      <z-table-column label="Name4" prop="name" width="180"/>
+      <z-table-column label="Name5" prop="name" width="180"/>
     </z-table>
   </div>
 
