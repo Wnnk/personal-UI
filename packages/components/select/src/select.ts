@@ -47,6 +47,11 @@ export const selectProps = {
     type: Boolean,
     default: false
   },
+  clearable: {
+    type: Boolean,
+    default: false
+  },
+
 }
 
 export const selectEmits = {

@@ -48,10 +48,17 @@
     padding: 2px;
     border-radius: 5px;
   }
-  /* 下拉箭头 */
+  /* 自定义头部 */
+  @include e(header){
+    border-bottom: 1px solid #dcdfe6;
+  }
+  /* 自定义footer */
+  @include e(footer){
+    border-top: 1px solid #dcdfe6;
+  }
+  /* 图标 */
   @include e(dropdown){
     position: absolute;
-    padding: 0px 5px;
     height: auto;
     right: 5px;
     top: 0;
@@ -61,10 +68,16 @@
     // pointer-events: none;
     cursor: pointer;
     z-index: 100;
-    @include when(is-focus) {
-      transform: rotate(-180deg);
+    @include e(icon){
+      padding: 0px 5px;
+      display: inline-flex;
+      place-items: center;
+      @include when(is-focus) {
+        transform: rotate(-180deg);
+      }
     }
   }
+
   /* 下来框选项 */
   @include e(options){
     position: absolute;
@@ -73,7 +86,23 @@
     width: 100%;
     border: 1px solid #dcdfe6;
     border-radius: 2px;
-
+    max-height: 200px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: #0003;
+      border-radius: 10px;
+      transition: all .2s ease-in-out;
+    }
+  
+  
+    &::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
   }
 }
 

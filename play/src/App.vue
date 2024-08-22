@@ -1,162 +1,8 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
 import { onMounted, ref, watch} from 'vue'
-import { TreeOption, Key } from '@commonUI/components/tree/index'
-import {groupType,nodesType} from '@commonUI/components/drag-form/src/dragForm'
-const createData = (level: number = 4, parentKey:string = ''):any => {
-  if (!level) return []
-  const arr = new Array(6 - level).fill(0)
-  return arr.map((_, index) => {
-    const key = `${parentKey}${level}${index}`
-    return {
-      label: createLabel(level),
-      key,
-      children: createData(level - 1, key)
-    }
-  })
-}
-
-// const createData = () => {
-//   return [
-//     {
-//       label:nextLabel(),
-//       key:1,
-//       isLeaf:false,
-//     },
-//     {
-//       label:nextLabel(),
-//       key:2,
-//       isLeaf:false,
-//     },
-
-//   ]
-// }
-
-const nextLabel = (currentLabel?:string | undefined | number): string => {
-  if (!currentLabel) return  'Out of Tao, One is  born'
-  if (currentLabel === 'Out of Tao, One is  born') return 'Out of One, Two'
-  if (currentLabel === 'Out of One, Two') return 'Out of Two, Three'
-  if (currentLabel === 'Out of Two, Three')  {
-    return 'Out of Three, the created universe'
-  }
-  if (currentLabel === 'Out of Three, the created universe'){
-    return 'Out of Tao, One is born'
-  } 
-  return ''
-}
-
-const createLabel = (level: number):string => {
-  if (level === 4) return '道生一'
-  if (level === 3) return '一生二'
-  if (level === 2) return '二生三' 
-  if (level === 1) return '三生万物'
-  return ''
-}
-
-const treeData = ref(createData())
-
-const handleLoad = (node:TreeOption) => {
-  return new Promise<TreeOption[]>((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          label:nextLabel(node.label),
-          key:node.key + nextLabel(node.label),
-          isLeaf:false,
-        }
-      ])
-    }, 1000);
-  })
-
-}
-
-const value = ref<Key[]>([]);
-/** 
- * @description 禁用功能，数据测试
- **/
-const data = ref<TreeOption[]>([
-  {
-    key:'0',
-    label:'0',
-    children:[
-      {
-        key:'0-0',
-        label:'0-0',
-      },
-      {
-        disabled:true,
-        key:'0-1',
-        label:'0-1',
-        children:[
-          {
-            key:'0-1-0',
-            label:'0-1-0',
-          },
-          {
-            key:'0-1-1',
-            label:'0-1-1',
-          }
-        ]
-      }
-    ]
-  },
-])
-
-const check = ref(true);
-
-const handleChange = (value:boolean) => {
-  console.log(value)
-}
-
-const handleClick = (e:MouseEvent) => {
-  console.log(e)
-}
 
 
-/** 
- * @description 拖拽表单数据测试
-**/
-// const dragData = ref<nodesType[]>([
-//   {
-//     label: '输入框',
-//     id: '1',
-//     dragType: 'input',
-//   },
-//   {
-//     label: '下拉框',
-//     id: '2',
-//     dragType: 'select',
-//     options:[
-//       {
-//         label: '选项1',
-//         value: '1'
-//       },
-//       {
-//         label: '选项2',
-//         value: '2'
-//       }
-//     ]
-
-//   },
-//   {
-//     label: '单选框',
-//     id: '3',
-//     dragType: 'radio',
-//     value: '1',
-//   }
-// ])
-// const dragData2 = ref<nodesType[]>([
-//   {
-//     id:'10',
-//     label: '输入框',
-//     dragType: 'input',
-//   },
-//   {
-//     id:'20',
-//     label: '下拉框',
-//     dragType:'select',
-//   }
-// ])
 
 /* timeAgo */
 // const dict = {
@@ -206,7 +52,7 @@ const changeOptions = (res:any) => {
 const useApi = async() => {
 
   try {
-    const response = await fetch('https://mock.presstime.cn/mock/66b9f2d18b18b22c21d33bf7/ui/select');
+    const response = await fetch(`https://mock.presstime.cn/mock/66b9f2d18b18b22c21d33bf7/ui/select`);
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -217,28 +63,7 @@ const useApi = async() => {
   }
 }
 
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 149, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 119, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 169, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
+
 
 
 onMounted(() => {
@@ -258,14 +83,25 @@ onMounted(() => {
       :autoLoad="true"
       :api="useApi"
       :lazy="true"
+      :clearable="true"
       > 
+      <template #header>
+        <div>
+          自定义头部
+        </div>
+      </template>
+      <template #footer>
+        <div>
+          自定义footer
+        </div>
+      </template>
     </z-select>
 
-    <z-table :data="tableData" style="width: 100%;" :border="false" height="300" :multiple="false">
+ <!--    <z-table :data="tableData" style="width: 100%;" :border="false" height="300" :multiple="false">
       <z-table-column prop="date"  width="180"  label="Date" :sort="true"/>
       <z-table-column prop="name" label="Name" width="150" />
-      <z-table-column prop="address" label="Address" :sort="true"/><!-- 自动计算宽度 -->
-    </z-table>
+      <z-table-column prop="address" label="Address" :sort="true"/>
+    </z-table> -->
   </div>
 
 </template>
