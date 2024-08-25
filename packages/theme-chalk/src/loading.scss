@@ -1,0 +1,20 @@
+@use 'mixins/mixins.scss' as *;
+@use 'common/var.scss' as *;
+
+
+@include b(loading) {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #000;
+  border-top-color: transparent;
+  border-radius: 100%;
+  animation: circle 1.75s infinite  linear;
+}
+@keyframes circle {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

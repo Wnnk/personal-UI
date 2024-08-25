@@ -97,6 +97,18 @@ onMounted(() => {
       </template>
     </z-select>
 
+
+    <z-card style="max-width: 480px;">
+      <template #header>
+        <div class="card-header">
+          <span>Card name</span>
+        </div>
+      </template>
+      <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
+      <template #footer>Footer content</template>
+    </z-card>
+    <z-loading loading></z-loading>
+
  <!--    <z-table :data="tableData" style="width: 100%;" :border="false" height="300" :multiple="false">
       <z-table-column prop="date"  width="180"  label="Date" :sort="true"/>
       <z-table-column prop="name" label="Name" width="150" />

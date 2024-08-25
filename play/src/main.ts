@@ -12,7 +12,8 @@ import Select from '@commonUI/components/select'
 import Option from '@commonUI/components/option'
 import Table from '@commonUI/components/table'
 import TableColumn from '@commonUI/components/tableColumn'
-
+import Card from '@commonUI/components/card'
+import Loading from '@commonUI/components/loading'
 import '@commonUI/theme-chalk/src/index.scss'
 
 const plugins = [
@@ -27,6 +28,8 @@ const plugins = [
   Option,
   Table,
   TableColumn,
+  Card,
+  Loading,
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {
