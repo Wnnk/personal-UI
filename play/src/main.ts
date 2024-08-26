@@ -14,7 +14,10 @@ import Table from '@commonUI/components/table'
 import TableColumn from '@commonUI/components/tableColumn'
 import Card from '@commonUI/components/card'
 import Loading from '@commonUI/components/loading'
+import Carousel from '@commonUI/components/carousel'
+
 import '@commonUI/theme-chalk/src/index.scss'
+
 
 const plugins = [
   Icon,
@@ -30,6 +33,7 @@ const plugins = [
   TableColumn,
   Card,
   Loading,
+  Carousel,
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {

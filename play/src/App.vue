@@ -107,7 +107,10 @@ onMounted(() => {
       <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
       <template #footer>Footer content</template>
     </z-card>
-    <z-loading loading></z-loading>
+    <!-- <z-loading loading></z-loading> -->
+
+
+    <z-carousel style="width: 100%; height: 500px;"> </z-carousel>
 
  <!--    <z-table :data="tableData" style="width: 100%;" :border="false" height="300" :multiple="false">
       <z-table-column prop="date"  width="180"  label="Date" :sort="true"/>
