@@ -1,129 +1,79 @@
 <script setup lang='ts'>
+import { onMounted, ref } from 'vue'
+import tableBody from './tableBody/table-body.vue';
+import tableHeader from './tableHeader/table-header.vue';
+import tableFooter from './tableFooter/table-footer.vue';
 import { createNamespace } from '@commonUI/utils/create';
-import { onMounted, provide, ref} from 'vue';
-import { tableProps } from './table'
-import tableHeader from './tableHeader.vue';
-import tableBody from './tableBody.vue';
-import tableFooter from './tableFooter.vue';
+import { tableProps } from './table';
+import  { createStore} from './store/helper'
 
-
-const columns = ref<any>([])
-const getColumns = (column: any) => {
-  columns.value.push(column);
-}
-provide('getColumns', getColumns);
 const bem = createNamespace('table');
-const props = defineProps(tableProps)
-
+const props = defineProps(tableProps);
 defineOptions({
-  name:'z-table',
+  name: 'z-table',
 })
 
-const tableInnerRef = ref();
-const innerWidth = ref(0);
+ const { state }  = createStore(props);
 
-const tableRenderData = ref<any>([]);
-tableRenderData.value = props.data;
-
-/** 
- * @description: 更新排序
- * @param {string} type 排序类型
- * @param {string} prop 排序属性
-**/
-const updateColumn = (type: string, prop: string) => {
-
-  if (type === 'asc') {
-    tableRenderData.value.sort((a:any, b:any) => {
-      /* 字符串比较 */
-      if (typeof a[prop] ==='string' && typeof b[prop] ==='string') {
-        return a[prop].localeCompare(b[prop]);
-      }
-      /* NaN情况处理 */
-      if (isNaN(a[prop]) || isNaN(b[prop])) {
-       if(isNaN(a[prop]) && isNaN(b[prop])) return 0;
-        if(isNaN(a[prop])) return -1;
-        if(isNaN(b[prop])) return 1;
-      }
-      return a[prop] - b[prop];
-    })
-  } else if (type === 'desc'){
-    tableRenderData.value.sort((a:any, b:any) => {
-      if (typeof a[prop] ==='string' && typeof b[prop] ==='string') {
-        return b[prop].localeCompare(a[prop]);
-      }
-       /* Nan情况处理 */
-      if (isNaN(a[prop]) || isNaN(b[prop])) {
-        if(isNaN(a[prop]) && isNaN(b[prop])) return 0;
-        if(isNaN(a[prop])) return 1;
-        if(isNaN(b[prop])) return -1;
-      }
-
-    })
-   
-  }
-  return;
-}
-
-
-/* 多选 */
-const isMultiple = ref(false);
-const selectionRows = ref<number[]>([]);
-isMultiple.value = props.multiple;
-/** 
- *  @description: 选中或取消选中某一行
- *  @param {number} index 行索引
- *  @param {row} row 行数据
- **/
-
-const toggleSelection = (index: number, row: any) => {
-  if (isMultiple.value) {
-    /* 多选 */
-    if (!selectionRows.value.includes(index)) {
-      /* 点击未选中行 */
-      selectionRows.value.push(index);
-    } else {
-      /* 点击已选中行 */
-      selectionRows.value.splice(selectionRows.value.indexOf(index), 1);
-    }
-  } else {
-    /* 单选 */
-    if (!selectionRows.value.includes(index)) {
-      /* 点击未选中行 */
-      selectionRows.value = [index];
-    } else {
-      /* 点击已选中行 */
-      selectionRows.value = [];
-    }
-    
-  }
-}
-
+ const root = ref<HTMLDivElement>();
 onMounted(() => {
-
-});
-
-
+  console.log(root.value!.clientWidth)
+})
 </script>
 
 <template>
-  <div :class="[bem.b()]" >
-    <div :class="[bem.e('table-fit')]">
-      <div :class="[bem.e('table-inner')]" :style="{ height: `${props.height}px`}">
-        <tableHeader :border="props.border" :columns = "columns"  @toggle-sort="updateColumn">
-          <slot ></slot>
-        </tableHeader>
-        <tableBody 
-          :data="tableRenderData" 
-          :border="props.border" 
-          :columns = "columns" 
-          @toggle-selection="toggleSelection"
-          :selection-rows="selectionRows"
+  <div :class="[bem.b(), bem.e('fit')]" ref="root">
+    <div :class="[bem.e('inner-wrapper')]">
+      <div :class="[bem.e('hidden-columns')]">
+        <slot></slot>
+      </div>
+
+      <div :class="[bem.e('header-wrapper')]" v-if="state.ready " >
+        <table 
+          :class="[bem.e('header')]" 
+          :style="{ width: `${root!.clientWidth}px` }" 
+          v-if="root"
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
         >
-        </tableBody >
+          <colgroup>
+            <col v-for="(col, index) in state.columns" :key="index" :style="{ width: `${col.width}px`}"/>
+
+          </colgroup>
+
+          <tableHeader :columns="state.columns"></tableHeader>
+        </table>
+      </div>
+
+      <div :class="[bem.e('body-wrapper')]">
+        <div :class="[bem.e('scroll-bar')]">
+          <div :class="[bem.e('scroll-view')]">
+            <table :class="[bem.e('body')]">
+              <colgroup>
+                <col v-for="(col, index) in state.columns" :key="index" :style="{ width: col.width }"/>
+              </colgroup>
+
+
+              <tableBody :data="state.data"></tableBody>
+              <tableFooter></tableFooter>
+            </table>
+            <div :class="[bem.e('empty')]">
+              <span :class="[bem.e('empty-text')]">
+                <slot name="empty"></slot>
+              </span>
+            </div>
+
+            <div :class="[bem.e('append-wrapper')]" v-if="$slots.append">
+              <slot name="append"></slot>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
-
   </div>
+  
 </template>
 
 <style lang='scss' scoped>

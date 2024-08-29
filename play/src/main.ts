@@ -10,12 +10,9 @@ import TimeAge from '@commonUI/components/timeago'
 import DragForm from '@commonUI/components/drag-form'
 import Select from '@commonUI/components/select'
 import Option from '@commonUI/components/option'
-import Table from '@commonUI/components/table'
-import TableColumn from '@commonUI/components/tableColumn'
 import Card from '@commonUI/components/card'
 import Loading from '@commonUI/components/loading'
-import Carousel from '@commonUI/components/carousel'
-
+import { Table, TableColumn } from '@commonUI/components/table'
 import '@commonUI/theme-chalk/src/index.scss'
 
 
@@ -29,11 +26,10 @@ const plugins = [
   DragForm,
   Select,
   Option,
-  Table,
-  TableColumn,
   Card,
   Loading,
-  Carousel,
+  Table,
+  TableColumn
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {

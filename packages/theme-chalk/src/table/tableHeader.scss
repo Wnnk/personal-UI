@@ -1,82 +1,37 @@
-@use  '../mixins/mixins.scss' as *;
+@use '../mixins/mixins.scss' as *;
+@use '../common/var.scss' as *;
 
-@include b(table-header) {
-  overflow: hidden;
-  flex-shrink: 0;
-  width: 100%;
-  @include e(header){
-    table-layout: fixed;
-    border-collapse: collapse;
-  }
-  
+
+@include b(table-header){
+  border: 5px solid #fff;
   @include e(thead){
     color: #909399;
-    box-sizing: border-box;
   }
-
-  @include e(table-cell) {
+  @include e(tr){
+    background-color: #fff;
+  }
+  @include e(table-cell){
+    background-color: #fff;
+    border-bottom: 1px solid #ebeef5;
+    border-right: none;
     padding: 8px 0;
-    min-width: 0;
+    // min-width: 0;
     box-sizing: border-box;
     text-overflow: ellipsis;
     vertical-align: middle;
     position: relative;
     text-align: left;
     z-index: 1;
-    border-bottom: 1px solid #EBEEF5;
-    @include when(border){
-      border:1px solid #EBEEF5 ;
-    }
+    font-weight: 600;
+    display: table-cell;
   }
-
   @include e(cell){
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    overflow-wrap: break-word;
     line-height: 23px;
     padding: 0 12px;
   }
-  
 }
-
-.caret-wrapper{
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  height: 14px;
-  width: 24px;
-  vertical-align: middle;
-  cursor: pointer;
-  overflow: initial;
-  position: relative;
-}
-.asc{
-  width: 0;
-  height: 0;
-  border: solid 5px transparent;
-  position: absolute;
-  left: 7px;
-  border-bottom-color: #a8abb2;
-  top: -5px;
-}
-.desc {
-  width: 0;
-  height: 0;
-  border: solid 5px transparent;
-  position: absolute;
-  left: 7px;
-  border-top-color: #a8abb2;
-  bottom: -3px;
-}
-.is-asc{
-  border-bottom-color: #409eef;
-}
-.is-desc {
-  border-top-color: #409eef;
-}
-
-
-
 

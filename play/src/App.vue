@@ -64,7 +64,225 @@ const useApi = async() => {
 }
 
 
-
+const tableData = [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+  {
+    date: '2016-05-08',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+  {
+    date: '2016-05-06',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+  {
+    date: '2016-05-07',
+    name: 'Tom',
+    state: 'California',
+    city: 'San Francisco',
+    address: '3650 21st St, San Francisco',
+    zip: 'CA 94114',
+    family: [
+      {
+        name: 'Jerry',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Spike',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+      {
+        name: 'Tyke',
+        state: 'California',
+        city: 'San Francisco',
+        address: '3650 21st St, San Francisco',
+        zip: 'CA 94114',
+      },
+    ],
+  },
+]
 
 onMounted(() => {
   
@@ -98,7 +316,7 @@ onMounted(() => {
     </z-select>
 
 
-    <z-card style="max-width: 480px;">
+    <!-- <z-card style="max-width: 480px;">
       <template #header>
         <div class="card-header">
           <span>Card name</span>
@@ -106,17 +324,22 @@ onMounted(() => {
       </template>
       <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
       <template #footer>Footer content</template>
-    </z-card>
+    </z-card> -->
     <!-- <z-loading loading></z-loading> -->
 
 
-    <z-carousel style="width: 100%; height: 500px;"> </z-carousel>
-
- <!--    <z-table :data="tableData" style="width: 100%;" :border="false" height="300" :multiple="false">
-      <z-table-column prop="date"  width="180"  label="Date" :sort="true"/>
-      <z-table-column prop="name" label="Name" width="150" />
-      <z-table-column prop="address" label="Address" :sort="true"/>
-    </z-table> -->
+   
+    <z-table :data="tableData" :border="true" style="width: 100%; height: 500px;">
+      <z-table-column prop="date" label="Date" width="150"></z-table-column>
+      <z-table-column prop="name" label="name" width="150"></z-table-column>
+      <z-table-column prop="state" label="State" width="300"></z-table-column>
+      <z-table-column label="City" prop="city" />
+      <z-table-column label="Address" prop="address" />
+      <z-table-column label="Zip" prop="zip" />
+      <z-table-column prop="name" label="name1" width="150"/>
+      <z-table-column prop="name" label="name2" width="150"/>
+      <z-table-column prop="name" label="name3" width="150"/>
+    </z-table>
   </div>
 
 </template>
@@ -125,6 +348,22 @@ onMounted(() => {
 .app {
   width: 100%;
   height: 100vh;
+}
 
+.carousel-item{
+  color: #475669;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.carousel-item:nth-child(2n){
+  background-color: #99a9bf;
+}
+
+.carousel-item:nth-child(2n + 1){
+  background-color: #d3dce6;
 }
 </style>

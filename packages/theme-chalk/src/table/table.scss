@@ -1,28 +1,81 @@
-@use  '../mixins/mixins.scss' as *;
+@use '../mixins/mixins.scss' as *;
+@use '../common/var.scss' as *;
+
+
 
 @include b(table) {
-  margin: .5px;
-  background-color: #fff;
+  position: relative;
+  overflow: hidden;
   box-sizing: border-box;
-  padding: 1.5rem;
+  height: fit-content;
+  width: 100%;
+  max-width: 100%;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #606266;
 
-  @include e(table-fit){
+  @include e(fit){
     border-right: 0;
     border-bottom: 0;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    height: fit-content;
-    width: 100%;
-    max-width: 100%;
-    background-color: #fff;
-    font-size: 14px;
-    color: #606266;
   }
-  @include e(table-inner){
+
+  @include e(inner-wrapper) {
     position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
+    &::before {
+      width: 100%;
+      content: '';
+      position: absolute;
+      background-color: #ebeef5;
+      z-index: 3;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+      box-sizing: border-box;
+    }
+  }
+
+  @include e(hidden-columns){
+    visibility: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  @include e(header-wrapper) {
+    overflow: hidden;
+    flex-shrink: 0;
+    width: 100%;
+  }
+  
+  @include e(header) {
+    table-layout: fixed;
+    border-collapse: separate;
+  }
+
+  @include e(body-wrapper) {
+    overflow: hidden;
+    position: relative;
+    flex: 1;
+    width: 100%;
+
+  }
+  @include e(scroll-bar){
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    opacity: .3;
+    color: #909399;
+    &:hover{
+      opacity: .5;
+      color: #909399;
+    }
+  }
+
+  @include e(body){
+    table-layout: fixed;
+    border-collapse: separate;
   }
 }
+

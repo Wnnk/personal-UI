@@ -1,13 +1,12 @@
 <script setup lang='ts'>
+import { tableBodyProps } from '../table'
 import { createNamespace } from '@commonUI/utils/create';
-
-
-const bem = createNamespace('table-footer');
+const bem = createNamespace('table-column');
 </script>
 
 <template>
-  <div :class="[bem.b()]">
-
+  <div>
+    
   </div>
 </template>
 
