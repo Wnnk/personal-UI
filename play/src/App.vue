@@ -329,16 +329,16 @@ onMounted(() => {
 
 
    
-    <z-table :data="tableData" :border="true" style="width: 100%; height: 500px;">
+    <z-table :data="tableData" :border="true" height="400">
       <z-table-column prop="date" label="Date" width="150"></z-table-column>
       <z-table-column prop="name" label="name" width="150"></z-table-column>
-      <z-table-column prop="state" label="State" width="300"></z-table-column>
+      <z-table-column prop="state" label="State" width="100"></z-table-column>
       <z-table-column label="City" prop="city" />
       <z-table-column label="Address" prop="address" />
       <z-table-column label="Zip" prop="zip" />
       <z-table-column prop="name" label="name1" width="150"/>
-      <z-table-column prop="name" label="name2" width="150"/>
-      <z-table-column prop="name" label="name3" width="150"/>
+      <z-table-column prop="name" label="name2" width="350"/>
+      <z-table-column prop="name" label="name3" width="350"/>
     </z-table>
   </div>
 

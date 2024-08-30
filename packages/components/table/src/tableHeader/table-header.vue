@@ -1,10 +1,12 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { tableHeaderProps } from '../table';
-import { createStore } from '../store/helper'
+
+import { computed, onMounted, ref } from 'vue';
 const bem  = createNamespace('table-header');
 const props = defineProps(tableHeaderProps);
-// const   { state }  = createStore(props);
+const totalWidth  = ref(0);
+
 </script>
 
 <template>

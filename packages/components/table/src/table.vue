@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <div :class="[bem.b(), bem.e('fit')]" ref="root">
-    <div :class="[bem.e('inner-wrapper')]">
+    <div :class="[bem.e('inner-wrapper')]" :style="{height: `${props.height}px`}">
       <div :class="[bem.e('hidden-columns')]">
         <slot></slot>
       </div>
@@ -51,11 +51,11 @@ onMounted(() => {
           <div :class="[bem.e('scroll-view')]">
             <table :class="[bem.e('body')]">
               <colgroup>
-                <col v-for="(col, index) in state.columns" :key="index" :style="{ width: col.width }"/>
+                <col v-for="(col, index) in state.columns" :key="index" :style="{ width:`${col.width}px`  }"/>
               </colgroup>
 
 
-              <tableBody :data="state.data"></tableBody>
+              <tableBody :data="state.data" :columns="state.columns"></tableBody>
               <tableFooter></tableFooter>
             </table>
             <div :class="[bem.e('empty')]">

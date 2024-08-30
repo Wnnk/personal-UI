@@ -1,0 +1,31 @@
+@use '../mixins/mixins.scss' as *;
+@use '../common/var.scss' as *;
+
+
+@include b(table-body) {
+  @include e(row) {
+    background-color: #fff;
+  }
+  @include e(table-cell){
+    transition: background-color .25s ease;
+    border-right: none;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 8px 0;
+    position: relative;
+    text-align: left;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    z-index: 1;
+  }
+
+  @include e(cell){
+    box-sizing: border-box;
+    line-height: 23px;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    padding: 0 12px;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+}

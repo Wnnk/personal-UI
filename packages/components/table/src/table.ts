@@ -7,6 +7,9 @@ export const tableProps = {
   border: {
     type: Boolean,
     default: false
+  },
+  height: {
+    type: String,
   }
 }
 
@@ -26,6 +29,11 @@ export const tableHeaderProps = {
 export const tableBodyProps = {
   data: {
     type: Array as PropType<Array<Table>>,
+    default: () => [],
+    required: true
+  },
+  columns: {
+    type: Array as PropType<Array<Columns>>,
     default: () => [],
     required: true
   }
