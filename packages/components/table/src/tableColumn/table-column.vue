@@ -2,6 +2,7 @@
 import { createNamespace } from '@commonUI/utils/create';
 import { tableColumnProps } from './tableColumn';
 import { SetColumns } from '../store/helper';
+import { useSlots } from 'vue';
 const bem = createNamespace('table-column');
 const props = defineProps(tableColumnProps);
 defineOptions({
@@ -9,11 +10,12 @@ defineOptions({
   inheritAttrs: false,
 })
 SetColumns(props);
+
 </script>
 
 <template>
-  <div>
-    <!-- <slot></slot> -->
+  <div>4
+    {{ useSlots()['append'] }}
   </div>
 </template>
 

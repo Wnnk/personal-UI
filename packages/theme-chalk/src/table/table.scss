@@ -93,7 +93,8 @@
 
   @include e(body){
     table-layout: fixed;
-    border-collapse: separate;
+    border-collapse: collapse;
+    box-sizing: border-box;
   }
 }
 

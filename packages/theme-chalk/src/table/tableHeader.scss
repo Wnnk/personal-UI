@@ -33,5 +33,47 @@
     line-height: 23px;
     padding: 0 12px;
   }
+
+  @include e(caret-wrapper) {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    height: 14px;
+    width: 24px;
+    vertical-align: middle;
+    cursor: pointer;
+    overflow: initial;
+    position: relative;
+  }
+
+  @include e(sort-caret) {
+    width: 0;
+    height: 0;
+    border: solid 5px transparent;
+    position: absolute;
+    left: 7px;
+
+    @include when(ascending){
+      border-bottom-color: #409eff;
+    }
+
+    @include when(descending) {
+      border-top-color:#409eff;
+    }
+  }
+
+  @include e(asc) {
+    border-bottom-color: #a8abb2;
+    top: -5px;
+  }
+
+  @include e(desc) {
+    border-top-color:#a8abb2;
+    bottom: -3px;
+  }
+
+  
+
+
 }
 

@@ -77,21 +77,21 @@ const tableData = [
         name: 'Jerry',
         state: 'California',
         city: 'San Francisco',
-        address: '3650 21st St, San Francisco',
+        address: '3651 21st St, San Francisco',
         zip: 'CA 94114',
       },
       {
         name: 'Spike',
         state: 'California',
         city: 'San Francisco',
-        address: '3650 21st St, San Francisco',
+        address: '3652 21st St, San Francisco',
         zip: 'CA 94114',
       },
       {
         name: 'Tyke',
         state: 'California',
         city: 'San Francisco',
-        address: '3650 21st St, San Francisco',
+        address: '3653 21st St, San Fran-cisco',
         zip: 'CA 94114',
       },
     ],
@@ -101,7 +101,7 @@ const tableData = [
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
-    address: '3650 21st St, San Francisco',
+    address: '3657 21st St, San Francisco',
     zip: 'CA 94114',
     family: [
       {
@@ -132,7 +132,7 @@ const tableData = [
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
-    address: '3650 21st St, San Francisco',
+    address: '3660 21st St, San Francis-co',
     zip: 'CA 94114',
     family: [
       {
@@ -163,7 +163,7 @@ const tableData = [
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
-    address: '3650 21st St, San Francisco',
+    address: '3150 21st St, San Francisco',
     zip: 'CA 94114',
     family: [
       {
@@ -194,7 +194,7 @@ const tableData = [
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
-    address: '3650 21st St, San Francisco',
+    address: '3640 21st St, San Francisco',
     zip: 'CA 94114',
     family: [
       {
@@ -225,7 +225,7 @@ const tableData = [
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
-    address: '3650 21st St, San Francisco',
+    address: '31650 21st St, San Francisco',
     zip: 'CA 94114',
     family: [
       {
@@ -256,7 +256,7 @@ const tableData = [
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
-    address: '3650 21st St, San Francisco',
+    address: '2650 21st St, San Francisco',
     zip: 'CA 94114',
     family: [
       {
@@ -284,9 +284,9 @@ const tableData = [
   },
 ]
 
-onMounted(() => {
-  
-})
+const userSort = () => {
+  console.log('自定义排序')
+}
 </script>
 
 <template>
@@ -330,15 +330,17 @@ onMounted(() => {
 
    
     <z-table :data="tableData" :border="true" height="400">
-      <z-table-column prop="date" label="Date" width="150"></z-table-column>
-      <z-table-column prop="name" label="name" width="150"></z-table-column>
+      <z-table-column type="expand" width="50">
+      </z-table-column>
+      <z-table-column prop="date" label="Date" width="150" sortable></z-table-column>
+      <z-table-column prop="name" label="name" width="150" ></z-table-column>
       <z-table-column prop="state" label="State" width="100"></z-table-column>
       <z-table-column label="City" prop="city" />
-      <z-table-column label="Address" prop="address" />
+      <z-table-column label="Address" prop="address" sortable :sort-method="userSort"/>
       <z-table-column label="Zip" prop="zip" />
-      <z-table-column prop="name" label="name1" width="150"/>
+      <!-- <z-table-column prop="name" label="name1" width="150"/>
       <z-table-column prop="name" label="name2" width="350"/>
-      <z-table-column prop="name" label="name3" width="350"/>
+      <z-table-column prop="name" label="name3" width="350"/> -->
     </z-table>
   </div>
 

@@ -17,6 +17,7 @@
     text-overflow: ellipsis;
     vertical-align: middle;
     z-index: 1;
+    border-bottom: 1px solid #ebeef5;
   }
 
   @include e(cell){
@@ -28,4 +29,32 @@
     text-overflow: ellipsis;
     white-space: normal;
   }
+
+  @include e(expand-icon){
+    position: relative;
+    color: #606266;
+    cursor: pointer;
+    font-size: 12px;
+    transition: transform .2s ease-in-out;
+    height: 20px;
+    display: inline-flex;
+    place-items: center;
+    @include when(expand){
+      transform: rotate(90deg);
+    }
+  }
+
+  @include e(icon){
+    height: 1em;
+    width: 1em;
+    line-height: 1em;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    fill: currentColor;
+    color:inherit;
+  }
+
+
 }

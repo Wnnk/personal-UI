@@ -1,11 +1,11 @@
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref,useSlots } from 'vue'
 import tableBody from './tableBody/table-body.vue';
 import tableHeader from './tableHeader/table-header.vue';
 import tableFooter from './tableFooter/table-footer.vue';
 import { createNamespace } from '@commonUI/utils/create';
 import { tableProps } from './table';
-import  { createStore} from './store/helper'
+import  { createStore, sort} from './store/helper'
 
 const bem = createNamespace('table');
 const props = defineProps(tableProps);
@@ -17,7 +17,7 @@ defineOptions({
 
  const root = ref<HTMLDivElement>();
 onMounted(() => {
-  console.log(root.value!.clientWidth)
+ console.log(useSlots())
 })
 </script>
 
@@ -39,23 +39,20 @@ onMounted(() => {
         >
           <colgroup>
             <col v-for="(col, index) in state.columns" :key="index" :style="{ width: `${col.width}px`}"/>
-
           </colgroup>
 
-          <tableHeader :columns="state.columns"></tableHeader>
+          <tableHeader :columns="state.columns" :border="props.border" :sort="sort"></tableHeader>
         </table>
       </div>
 
       <div :class="[bem.e('body-wrapper')]">
         <div :class="[bem.e('scroll-bar')]">
           <div :class="[bem.e('scroll-view')]">
-            <table :class="[bem.e('body')]">
+            <table :class="[bem.e('body')]"  style="width: 100%;">
               <colgroup>
                 <col v-for="(col, index) in state.columns" :key="index" :style="{ width:`${col.width}px`  }"/>
               </colgroup>
-
-
-              <tableBody :data="state.data" :columns="state.columns"></tableBody>
+              <tableBody :data="state.data" :columns="state.columns" :border="props.border" ></tableBody>
               <tableFooter></tableFooter>
             </table>
             <div :class="[bem.e('empty')]">
@@ -72,6 +69,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
   </div>
   
 </template>

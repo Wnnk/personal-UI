@@ -23,6 +23,14 @@ export const tableHeaderProps = {
     default: () => [],
     required: true
   },
+  border: {
+    type: Boolean,
+    default: false
+  },
+  sort: {
+    type: Array as PropType<Array<string>>,
+    default: () => []
+  }
 
 }
 
@@ -36,7 +44,11 @@ export const tableBodyProps = {
     type: Array as PropType<Array<Columns>>,
     default: () => [],
     required: true
-  }
+  },
+  border: {
+    type: Boolean,
+    default: false
+  },
 }
 
 
@@ -54,10 +66,12 @@ export interface Columns {
   sortable?:boolean,
   sortMethod?:Function,
   align?: Align,
+  type: string,
 }
 const enum Align {
   Left = 'left',
   Center = 'center',
   Right = 'right'
 }
+
 
