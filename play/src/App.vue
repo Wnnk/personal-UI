@@ -72,6 +72,8 @@ const tableData = [
     city: 'San Francisco',
     address: '3650 21st St, San Francisco',
     zip: 'CA 94114',
+    amount: 1353,
+    amount1: 10,
     family: [
       {
         name: 'Jerry',
@@ -103,6 +105,8 @@ const tableData = [
     city: 'San Francisco',
     address: '3657 21st St, San Francisco',
     zip: 'CA 94114',
+    amount: '2054',
+    amount1: 15,
     family: [
       {
         name: 'Jerry',
@@ -134,6 +138,8 @@ const tableData = [
     city: 'San Francisco',
     address: '3660 21st St, San Francis-co',
     zip: 'CA 94114',
+    amount: 1333,
+    amount1: 12,
     family: [
       {
         name: 'Jerry',
@@ -165,6 +171,8 @@ const tableData = [
     city: 'San Francisco',
     address: '3150 21st St, San Francisco',
     zip: 'CA 94114',
+    amount: 1253,
+    amount1: '12.45',
     family: [
       {
         name: 'Jerry',
@@ -196,6 +204,8 @@ const tableData = [
     city: 'San Francisco',
     address: '3640 21st St, San Francisco',
     zip: 'CA 94114',
+    amount: '4.35',
+    amount1: 10,
     family: [
       {
         name: 'Jerry',
@@ -227,6 +237,8 @@ const tableData = [
     city: 'San Francisco',
     address: '31650 21st St, San Francisco',
     zip: 'CA 94114',
+    amount: '2900',
+    amount1: '9.85',
     family: [
       {
         name: 'Jerry',
@@ -258,6 +270,8 @@ const tableData = [
     city: 'San Francisco',
     address: '2650 21st St, San Francisco',
     zip: 'CA 94114',
+    amount: 1357,
+    amount1: 12,
     family: [
       {
         name: 'Jerry',
@@ -287,6 +301,8 @@ const tableData = [
 const userSort = () => {
   console.log('自定义排序')
 }
+
+
 </script>
 
 <template>
@@ -329,11 +345,18 @@ const userSort = () => {
 
 
    
-    <z-table :data="tableData" :border="true" height="400">
+    <z-table :data="tableData" :border="true" height="400" summary>
       <z-table-column type="expand" width="50">
+        <template #test="props">
+          <div class="expand-row">
+            <p>测试</p>
+          </div>
+        </template>
       </z-table-column>
       <z-table-column prop="date" label="Date" width="150" sortable></z-table-column>
       <z-table-column prop="name" label="name" width="150" ></z-table-column>
+      <z-table-column prop="amount" label="Amount" width="100" sortable></z-table-column>
+      <z-table-column prop="amount1" label="Amount1" width="100" sortable></z-table-column>
       <z-table-column prop="state" label="State" width="100"></z-table-column>
       <z-table-column label="City" prop="city" />
       <z-table-column label="Address" prop="address" sortable :sort-method="userSort"/>

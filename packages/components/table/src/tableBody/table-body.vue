@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 import { tableBodyProps } from '../table'
 import { createNamespace } from '@commonUI/utils/create';
-import { computed, onMounted, ref, watch } from 'vue';
-import  {expandArray, expandRows} from '../store/helper'
+import { computed, onMounted, ref, watch, h } from 'vue';
+import  {expandArray, expandRows, state} from '../store/helper'
 const bem = createNamespace('table-body');
 const props = defineProps(tableBodyProps);
 
@@ -12,9 +12,22 @@ const props = defineProps(tableBodyProps);
 });
 
 onMounted(() => {
-  console.log(expandArray.value)
+  console.log(state.value.slots)
 })
-
+const renderSlots = () => {
+  const vnode = h(
+    'div', // type
+    { }, // props
+    [
+      h('h1', null, 'Hello World')
+    ]
+  )
+  console.log(vnode)
+  // return vnode
+}
+onMounted(() => {
+  // renderSlots()
+})
 </script>
 
 <template>
@@ -34,7 +47,7 @@ onMounted(() => {
       </td>
     </tr>
   </tbody>
-
+  <div></div>
 </template>
 
 <style lang='scss' scoped>

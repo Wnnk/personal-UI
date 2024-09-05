@@ -7,6 +7,7 @@ export const state = ref({
   columns:<Columns[]>[],
   data:<Table[]>[],
   totalWidth:0,
+  slots:<any[]>[],
 })
 export const expandArray = ref<boolean[]>([])
 export const sort = ref<string[]>([])
@@ -72,3 +73,8 @@ export const sortColumn = (col:Columns, index:number, type:string) => {
     }
   })
 }
+
+export const setSlots = (slot:any) => {
+  state.value.slots.push(slot);
+}
+

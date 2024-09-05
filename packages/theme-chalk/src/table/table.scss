@@ -95,6 +95,19 @@
     table-layout: fixed;
     border-collapse: collapse;
     box-sizing: border-box;
+    height: 100%;
+  }
+
+
+  @include e(footer-wrapper) {
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  @include e(footer) {
+    table-layout: fixed;
+    border-collapse: collapse;
   }
 }
 

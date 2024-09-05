@@ -1,0 +1,29 @@
+@use '../mixins/mixins.scss' as *;
+@use '../common/var.scss' as *;
+
+
+@include b(table-footer) {
+  @include e(table-cell)  {
+    padding: 8px 0;
+    min-width: 0;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    position: relative;
+    text-align: left;
+    z-index: 1;
+    // border-bottom: 1px solid #ebeef5;
+    // border-right: 1px solid #ebeef5;
+    border: 1px solid #ebeef5;
+    background-color: #f5f7fa;
+  }
+  @include e(cell)  {
+    line-height: 23px;
+    box-sizing: border-box;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    padding:  0 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

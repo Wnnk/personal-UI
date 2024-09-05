@@ -10,6 +10,10 @@ export const tableProps = {
   },
   height: {
     type: String,
+  },
+  summary: {
+    type: Boolean,
+    default: false,
   }
 }
 
@@ -51,6 +55,13 @@ export const tableBodyProps = {
   },
 }
 
+
+export const tableFooterProps = {
+  store: {
+    type: Object as PropType<any>,
+    required: true,
+  }
+}
 
 export interface Table{
   [key: string]: any

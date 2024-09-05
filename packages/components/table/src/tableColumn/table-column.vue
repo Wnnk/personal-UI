@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { tableColumnProps } from './tableColumn';
-import { SetColumns } from '../store/helper';
-import { useSlots } from 'vue';
+import { SetColumns,setSlots } from '../store/helper';
+import { useSlots, h,defineComponent,getCurrentInstance, onMounted } from 'vue';
 const bem = createNamespace('table-column');
 const props = defineProps(tableColumnProps);
 defineOptions({
@@ -11,12 +11,19 @@ defineOptions({
 })
 SetColumns(props);
 
+
+
+onMounted(() => {
+  // const instance = getCurrentInstance();
+  // const slot = instance?.slots;
+  // if (slot) {
+  //   setSlots(slot)
+  // }
+})
 </script>
 
 <template>
-  <div>4
-    {{ useSlots()['append'] }}
-  </div>
+  <slot></slot>
 </template>
 
 <style lang='scss' scoped>

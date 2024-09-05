@@ -53,9 +53,9 @@ onMounted(() => {
                 <col v-for="(col, index) in state.columns" :key="index" :style="{ width:`${col.width}px`  }"/>
               </colgroup>
               <tableBody :data="state.data" :columns="state.columns" :border="props.border" ></tableBody>
-              <tableFooter></tableFooter>
+              <!-- <tableFooter></tableFooter> -->
             </table>
-            <div :class="[bem.e('empty')]">
+            <div :class="[bem.e('empty')]" v-if="state.data.length === 0">
               <span :class="[bem.e('empty-text')]">
                 <slot name="empty"></slot>
               </span>
@@ -67,6 +67,13 @@ onMounted(() => {
           </div>
 
         </div>
+      </div>
+
+      <div :class="[bem.e('footer-wrapper')]" v-if="props.summary">
+        <table :class="[bem.e('footer')]" v-if="state.ready" :style="{ width: `100%`}">
+          <colgroup v-for="(col,index) in state.columns" :key="index" :style="{ width: `${col.width}px`}"></colgroup>
+          <tableFooter :store="state"/>
+        </table>
       </div>
     </div>
 
