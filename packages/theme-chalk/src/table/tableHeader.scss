@@ -72,6 +72,45 @@
     bottom: -3px;
   }
 
+
+  @include e(filter-trigger) {
+    display: inline-block;
+    cursor: pointer;
+    transition: transform .2s ease-in-out;
+    i{
+      color: #909399;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    @include when(filter) {
+      transform: rotate(-180deg);
+    }
+  }
+
+  @include e(icon) {
+    height: 1em;
+    width: 1em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    fill:currentColor;
+
+  }
+  
+
+  @include e(filter-group) {
+    padding: 10px;
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background-color: red;
+    width: 200px;
+    height: 100px;
+  }
+
   
 
 

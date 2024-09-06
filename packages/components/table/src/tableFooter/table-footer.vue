@@ -31,7 +31,7 @@ const initSums = (columns:Columns[],data:Table[]) => {
 }
 
 const { colspan , sums } = initSums(props.store.columns,props.store.data);
-console.log(sums);
+
 </script>
 
 <template>

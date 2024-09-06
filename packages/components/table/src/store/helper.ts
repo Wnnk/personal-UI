@@ -11,6 +11,9 @@ export const state = ref({
 })
 export const expandArray = ref<boolean[]>([])
 export const sort = ref<string[]>([])
+
+export const filterExpandColMap = ref(new WeakMap<Columns, boolean>());
+
 /** 
  * @description: 创建表格全部状态, store 用于获取z-table-culumns的slot
  * 
@@ -29,6 +32,7 @@ export const createStore = (props:any) => {
 export const SetColumns = (col:Columns) => {
   state.value.columns.push(col);
   expandArray.value.push(false);
+  filterExpandColMap.value.set(col, false);
   sort.value.push('');
 }
 /** 
@@ -72,7 +76,19 @@ export const sortColumn = (col:Columns, index:number, type:string) => {
       return keyB.localeCompare(keyA);
     }
   })
+
+  return;
 }
+
+
+export const filterToggle = (col:Columns) => {
+  if (!filterExpandColMap.value.has(col)) return;
+  const expand = filterExpandColMap.value.get(col);
+  filterExpandColMap.value.set(col,!expand);
+  console.log(filterExpandColMap.value.get(col));
+  return;
+}
+
 
 export const setSlots = (slot:any) => {
   state.value.slots.push(slot);
