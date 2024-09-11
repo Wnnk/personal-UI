@@ -57,10 +57,19 @@ export const tableBodyProps = {
 
 
 export const tableFooterProps = {
-  store: {
-    type: Object as PropType<any>,
-    required: true,
+  // store: {
+  //   type: Object as PropType<any>,
+  //   required: true,
+  // },
+  columns: {
+    type: Array as PropType<Array<Columns>>,
+    default: () => [],
+  },
+  data: {
+    type: Array as PropType<Array<Table>>,
+    default: () => [],
   }
+
 }
 
 export interface Table{
@@ -78,7 +87,14 @@ export interface Columns {
   sortMethod?:Function,
   align?: Align,
   type: string,
+  filters: Array<Filter>,
 }
+
+export interface Filter {
+  text: string,
+  value: any,
+}
+
 const enum Align {
   Left = 'left',
   Center = 'center',

@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { tableFooterProps, Columns, Table } from '../table';
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, watch } from 'vue';
 
 const bem = createNamespace('table-footer');
 const props = defineProps(tableFooterProps);
@@ -10,27 +10,36 @@ const props = defineProps(tableFooterProps);
 const isNumber = (value:number|string) => {
   return !isNaN(parseFloat(value as string)) && isFinite(value as number);
 }
+const colspan = ref(0);
+const sums = ref<{[key:string]:number}>({});
 
 const initSums = (columns:Columns[],data:Table[]) => {
-
-  const sums:{[key:string]:number} = {};
-  let colspan = 0;
+  sums.value = {};
+  colspan.value = 0;
   let hasNumberCol = false;
   columns.forEach(column => {
     data.forEach(row => {
       if (isNumber(row[column.prop])) {
-        sums[column.prop] = (sums[column.prop] || 0) + parseFloat(row[column.prop] as string);
+        sums.value[column.prop] = (sums.value[column.prop] || 0) + parseFloat(row[column.prop] as string);
         hasNumberCol = true;
       }
     })
     if (!hasNumberCol) {
-      colspan++;
+      colspan.value++;
     }
   });
-  return { colspan, sums };
+  return;
 }
 
-const { colspan , sums } = initSums(props.store.columns,props.store.data);
+initSums(props.columns,props.data);
+
+watch(props, () => {
+  console.log('watch');
+  initSums(props.columns,props.data);
+},
+{deep: true}
+);
+
 
 </script>
 
@@ -42,7 +51,7 @@ const { colspan , sums } = initSums(props.store.columns,props.store.data);
           Sum
         </div>
       </td>
-      <template v-for="(col,index) in props.store.columns" :key="col.prop">
+      <template v-for="(col,index) in props.columns" :key="col.prop">
        <td :colspan="1" rowspan="1" 
         :class="[bem.e('table-cell')]" 
         v-if="index >= colspan"  

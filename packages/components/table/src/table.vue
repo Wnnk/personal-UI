@@ -1,11 +1,11 @@
 <script setup lang='ts'>
-import { onMounted, ref,useSlots } from 'vue'
+import { onMounted, ref,useSlots, watch } from 'vue'
 import tableBody from './tableBody/table-body.vue';
 import tableHeader from './tableHeader/table-header.vue';
 import tableFooter from './tableFooter/table-footer.vue';
 import { createNamespace } from '@commonUI/utils/create';
 import { tableProps } from './table';
-import  { createStore, sort} from './store/helper'
+import  { createStore, sort, tableBodyRows} from './store/helper'
 
 const bem = createNamespace('table');
 const props = defineProps(tableProps);
@@ -16,9 +16,8 @@ defineOptions({
  const { state }  = createStore(props);
 
  const root = ref<HTMLDivElement>();
-onMounted(() => {
- console.log(useSlots())
-})
+
+
 </script>
 
 <template>
@@ -41,7 +40,7 @@ onMounted(() => {
             <col v-for="(col, index) in state.columns" :key="index" :style="{ width: `${col.width}px`}"/>
           </colgroup>
 
-          <tableHeader :columns="state.columns" :border="props.border" :sort="sort"></tableHeader>
+          <tableHeader :columns="state.columns" :border="props.border" :sort="sort" ></tableHeader>
         </table>
       </div>
 
@@ -52,7 +51,7 @@ onMounted(() => {
               <colgroup>
                 <col v-for="(col, index) in state.columns" :key="index" :style="{ width:`${col.width}px`  }"/>
               </colgroup>
-              <tableBody :data="state.data" :columns="state.columns" :border="props.border" ></tableBody>
+              <tableBody :data="tableBodyRows" :columns="state.columns" :border="props.border" ></tableBody>
               <!-- <tableFooter></tableFooter> -->
             </table>
             <div :class="[bem.e('empty')]" v-if="state.data.length === 0">
@@ -67,12 +66,13 @@ onMounted(() => {
           </div>
 
         </div>
+        
       </div>
 
       <div :class="[bem.e('footer-wrapper')]" v-if="props.summary">
         <table :class="[bem.e('footer')]" v-if="state.ready" :style="{ width: `100%`}">
           <colgroup v-for="(col,index) in state.columns" :key="index" :style="{ width: `${col.width}px`}"></colgroup>
-          <tableFooter :store="state"/>
+          <tableFooter  :columns="state.columns" :data="tableBodyRows"/>
         </table>
       </div>
     </div>

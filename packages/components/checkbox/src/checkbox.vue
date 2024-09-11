@@ -34,9 +34,14 @@ onMounted(() => {
 })
 
 const handleChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const value = target.checked ? true : false;
-  emit('change',value)
+  event.stopPropagation();
+  event.preventDefault();
+  if ( !Array.isArray(props.modelValue)) {
+    const target = event.target as HTMLInputElement;
+    const value = target.checked ? true : false;
+    emit('change',value)
+  }
+  
 };
 </script>
 

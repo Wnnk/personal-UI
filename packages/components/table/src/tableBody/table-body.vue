@@ -12,22 +12,9 @@ const props = defineProps(tableBodyProps);
 });
 
 onMounted(() => {
-  console.log(state.value.slots)
+
 })
-const renderSlots = () => {
-  const vnode = h(
-    'div', // type
-    { }, // props
-    [
-      h('h1', null, 'Hello World')
-    ]
-  )
-  console.log(vnode)
-  // return vnode
-}
-onMounted(() => {
-  // renderSlots()
-})
+
 </script>
 
 <template>

@@ -14,11 +14,7 @@ SetColumns(props);
 
 
 onMounted(() => {
-  // const instance = getCurrentInstance();
-  // const slot = instance?.slots;
-  // if (slot) {
-  //   setSlots(slot)
-  // }
+
 })
 </script>
 

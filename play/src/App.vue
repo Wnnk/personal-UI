@@ -264,7 +264,7 @@ const tableData = [
     ],
   },
   {
-    date: '2016-05-07',
+    date: '2016-05-01',
     name: 'Tom',
     state: 'California',
     city: 'San Francisco',
@@ -353,7 +353,15 @@ const userSort = () => {
           </div>
         </template>
       </z-table-column>
-      <z-table-column prop="date" label="Date" width="150" sortable></z-table-column>
+      <z-table-column prop="date" label="Date" width="150" sortable 
+        :filters="[
+          { text: '2016-05-01', value: '2016-05-01' },
+          { text: '2016-05-02', value: '2016-05-02' },
+          { text: '2016-05-03', value: '2016-05-03' },
+          { text: '2016-05-04', value: '2016-05-04' },
+        ]"
+      >
+      </z-table-column>
       <z-table-column prop="name" label="name" width="150" ></z-table-column>
       <z-table-column prop="amount" label="Amount" width="100" sortable></z-table-column>
       <z-table-column prop="amount1" label="Amount1" width="100" sortable></z-table-column>

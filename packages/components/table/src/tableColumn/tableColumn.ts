@@ -1,5 +1,5 @@
 import { PropType } from 'vue'
-
+import { Filter } from '../table'
 export const tableColumnProps = {
   prop: {
     type: String,
@@ -23,6 +23,11 @@ export const tableColumnProps = {
   },
   sortMethod: {
     type: Function,
-  }
+  },
+  filters: {
+    type: Array as PropType<Array<Filter>>,
+    default: () => [],
+  },
+
 }
 
