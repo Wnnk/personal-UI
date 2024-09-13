@@ -23,24 +23,7 @@ const borderStyle = computed(() => {
 });
 
 
-// const filterCheckedChange = (ckecked: boolean[], col: Columns) => {
-//   const key =  col.prop;
 
-//   const filters = <any[]>[];
-//   for (let i = 0; i < col.filters.length; i++) {
-//     if (ckecked[i]) {
-//       filters.push(col.filters[i]);
-//     }
-//   }
-//   const rows = state.value.data;
-//  const result  = rows.filter(row => {
-//     return filters.some(filter => {
-//       console.log(filter.value, row[key], filter.value === row[key]);
-//       return filter.value === row[key]
-//     })
-//   });
-
-// }
 
 
 
@@ -83,8 +66,8 @@ const borderStyle = computed(() => {
                       </span>
                     </div>
                     <div :class="[bem.e('filter-footer')]" >
-                      <button @click="filterCheckedChange(filterChecked,item)">确认</button>
-                      <button>取消</button>
+                      <button @click="filterCheckedChange(filterChecked,item);filterToggle(item) ">确认</button>
+                      <button @click="filterToggle(item)">取消</button>
                     </div>
                   </div>
                 </Transition>
@@ -95,8 +78,8 @@ const borderStyle = computed(() => {
           
         </th>
       </tr>
-    </thead>
-    
+  </thead>
+  
 </template>
 
 <style lang='scss' scoped>

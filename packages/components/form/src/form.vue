@@ -1,0 +1,30 @@
+<template>
+  <form :class="classNames">
+    <slot></slot>
+  </form>
+</template>
+
+<script setup lang='ts'>
+import { createNamespace } from '@commonUI/utils/create';
+import { formProps, formEmits } from './form'
+import { computed, } from 'vue';
+  
+const props = defineProps(formProps);
+const emits = defineEmits(formEmits);
+const bem = createNamespace('form');
+// const COMPONENT_NAME = 'z-form';
+defineOptions({
+  name: 'z-form',
+})
+
+const classNames = computed(() => {
+  const {inline, labelPosition } = props;
+  
+  return [
+    bem.b(),
+    bem.m(`label-${labelPosition}`),
+    inline && bem.m('inline'),
+    
+  ]
+});
+</script>

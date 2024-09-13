@@ -347,7 +347,7 @@ const userSort = () => {
    
     <z-table :data="tableData" :border="true" height="400" summary>
       <z-table-column type="expand" width="50">
-        <template #test="props">
+        <template>
           <div class="expand-row">
             <p>测试</p>
           </div>
@@ -373,6 +373,18 @@ const userSort = () => {
       <z-table-column prop="name" label="name2" width="350"/>
       <z-table-column prop="name" label="name3" width="350"/> -->
     </z-table>
+
+
+
+    <z-form style="max-width: 200px;">
+      <z-form-item label="name">
+        <button>11</button>
+        <button>22</button>
+        <template #extra>
+          <div>extra</div>
+        </template>
+      </z-form-item>
+    </z-form>
   </div>
 
 </template>

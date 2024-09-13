@@ -1,0 +1,9 @@
+@use '../mixins/mixins.scss' as *;
+@use '../common/var.scss' as *;
+
+
+@include b(form-item) {
+  display: flex;
+  font-size: 14px;
+  margin-bottom: 18px;
+}

@@ -13,6 +13,7 @@ import Option from '@commonUI/components/option'
 import Card from '@commonUI/components/card'
 import Loading from '@commonUI/components/loading'
 import { Table, TableColumn } from '@commonUI/components/table'
+import { Form, FormItem } from '@commonUI/components/form'
 import '@commonUI/theme-chalk/src/index.scss'
 
 
@@ -29,7 +30,9 @@ const plugins = [
   Card,
   Loading,
   Table,
-  TableColumn
+  TableColumn,
+  Form,
+  FormItem,
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {

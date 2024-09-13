@@ -122,11 +122,15 @@ export const filterMenus = (e:MouseEvent) => {
 }
 
 
-export  const filterCheckedChange = (ckecked: boolean[], col: Columns) => {
+export  const filterCheckedChange = (checked: boolean[], col: Columns) => {
+  if (!checked.includes(true)) {
+    tableBodyRows.value = state.value.data;
+    return;
+  }
   const key =  col.prop;
   const filters = <any[]>[];
   for (let i = 0; i < col.filters.length; i++) {
-    if (ckecked[i]) {
+    if (checked[i]) {
       filters.push(col.filters[i]);
     }
   }
