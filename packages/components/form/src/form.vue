@@ -7,7 +7,8 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
 import { formProps, formEmits } from './form'
-import { computed, } from 'vue';
+import { computed, provide, reactive, toRef, toRefs} from 'vue';
+import { formContextKey, formItemContextKey } from "./constants";
   
 const props = defineProps(formProps);
 const emits = defineEmits(formEmits);
@@ -27,4 +28,13 @@ const classNames = computed(() => {
     
   ]
 });
+
+
+
+provide(
+  formContextKey,
+  reactive({
+    ...toRefs(props),
+  })
+)
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
-import { onMounted, ref, watch} from 'vue'
+import { onMounted, ref, watch, reactive} from 'vue'
 
 
 
@@ -302,6 +302,16 @@ const userSort = () => {
   console.log('自定义排序')
 }
 
+const sizeForm = reactive({
+  name: '',
+  region: '',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
+})
 
 </script>
 
@@ -375,11 +385,11 @@ const userSort = () => {
     </z-table>
 
 
+    <hr>
 
-    <z-form style="max-width: 200px;">
-      <z-form-item label="name">
-        <button>11</button>
-        <button>22</button>
+    <z-form style="max-width: 200px;" :model="sizeForm">
+      <z-form-item label="Avtivity name">
+        <input type="text" v-model="sizeForm.name">
         <template #extra>
           <div>extra</div>
         </template>
