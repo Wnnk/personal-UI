@@ -312,7 +312,8 @@ const sizeForm = reactive({
   resource: '',
   desc: '',
 })
-
+const size  = ref('default');
+const labelPosition = ref<string>('right');
 </script>
 
 <template>
@@ -386,13 +387,26 @@ const sizeForm = reactive({
 
 
     <hr>
+    {{ size }} {{ labelPosition }}
+    <button @click="size = 'large'">large</button>
+    <button @click="size = 'default'">default</button>
+    <button @click="size ='small'">small</button>
 
-    <z-form style="max-width: 200px;" :model="sizeForm">
+    <button @click="labelPosition = 'left'">left</button>
+    <button @click="labelPosition = 'right'">right</button>
+    <button @click="labelPosition = 'top'">top</button>
+    <z-form  :model="sizeForm" :label-position="labelPosition" :size="size"  label-width="auto" :inline="true">
       <z-form-item label="Avtivity name">
         <input type="text" v-model="sizeForm.name">
-        <template #extra>
-          <div>extra</div>
-        </template>
+      </z-form-item>
+
+      <z-form-item label="Region">
+        <input type="text" >
+        <button>region</button>
+      </z-form-item>
+
+      <z-form-item label="Date">
+        <input type="checkbox">checkbox</input>
       </z-form-item>
     </z-form>
   </div>

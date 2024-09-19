@@ -19,13 +19,13 @@ defineOptions({
 })
 
 const classNames = computed(() => {
-  const {inline, labelPosition } = props;
-  
+  const {inline, labelPosition, size } = props;
+  console.log(labelPosition)
   return [
     bem.b(),
     bem.m(`label-${labelPosition}`),
     inline && bem.m('inline'),
-    
+    size && bem.m(size),
   ]
 });
 

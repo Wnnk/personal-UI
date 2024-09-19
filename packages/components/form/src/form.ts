@@ -16,6 +16,10 @@ export const formProps = {
     type: String,
     default: ''
   },
+  size: {
+    type: String,
+    values: ['small','default', 'large'],
+  }
 
   
 } as const

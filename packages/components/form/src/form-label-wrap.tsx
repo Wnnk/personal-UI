@@ -6,7 +6,9 @@ const COMPONENT_NAME = 'z-label-wrap';
 export default defineComponent({
   name: COMPONENT_NAME,
   props: {
-
+    isAutoWidth: {
+      type: Boolean,
+    }
   },
 
   setup(props, { slots }) {
@@ -49,20 +51,35 @@ export default defineComponent({
     onBeforeUnmount(() => {
       updateLabelWidth('remove')
     })
-    // return (
-    //   <div ref={el} class={[bem.be('item','label-wrap')]} >
-    //     {slots.default?.()}
-    //   </div>
-    //   <Fragment ref={el}>{slots.default?.()}</Fragment>
-    // ) 
+
     return () => {
       if (!slots) return null;
-      return (
-        // <div ref={el} class={[bem.be('item','label-wrap')]} >
-        //   {slots.default?.()}
-        // </div>
-        <Fragment ref={el}>{slots.default?.()}</Fragment>
-      )
+      const { isAutoWidth } = props;
+      if (isAutoWidth) {
+        const autoLabelWidth = formContext?.autoLabelWidth;
+        const hasLabel = formItemContext?.hasLabel;
+        const style = {};
+        if(hasLabel && autoLabelWidth && autoLabelWidth !== 'auto') {
+          const marginWidth = Math.max(
+            0,
+            Number.parseInt(autoLabelWidth, 10) - computedWidth.value
+          )
+          const labelPosition = formItemContext.labelsition || formContext.labelPosition;
+          const mariginPosition = labelPosition === 'left' ? 'marginRight' : 'marginLeft';
+          if (marginWidth) {
+            style[mariginPosition] = `${marginWidth}px`;
+          }
+        }
+       
+        return (
+          <div ref={el} class={[bem.be('item','label-wrap')]} style={style}>
+            {slots.default?.()}
+          </div>
+        )
+      } else {
+        return <Fragment ref={el}>{slots.default?.()}</Fragment>
+      }
+     
     };
   },
 
