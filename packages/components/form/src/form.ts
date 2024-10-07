@@ -1,8 +1,22 @@
+import type { ExtractPropTypes } from 'vue'
 export const formProps = {
+  size: {
+    type: String,
+  },
+  rules: {
+    type: Array,
+    default: () => []
+  },
+  labelWidth: {
+    type: String,
+    default: ''
+  },
+  labelSuffix: {
+    type: String,
+    default: ''
+  },
   labelPosition: {
     type: String,
-    values:['left', 'right', 'top'],
-    default: 'left'
   },
   inline: {
     type: Boolean,
@@ -10,21 +24,14 @@ export const formProps = {
   },
   model: {
     type: Object,
-    default: () => ({})
+    default: () => {}
   },
-  labelWidth: {
-    type: String,
-    default: ''
-  },
-  size: {
-    type: String,
-    values: ['small','default', 'large'],
-  }
-
   
-} as const
+} as const;
 
 export const formEmits = {
-
+  
 }
 
+
+export type FormProps = ExtractPropTypes<typeof formProps>

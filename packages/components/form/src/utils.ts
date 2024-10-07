@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
-
+import { FormItemContext } from './types';
+import { Arrayable, FormItemProp } from "./formItem";
 
 export function useFormLabelWidth() {
 
@@ -37,14 +38,25 @@ export function useFormLabelWidth() {
     if (index >= -1) {
      potentialLabelWidthArr.value.splice(index, 1);
     }
-  
-    return {
-      autoLabelWidth,
-      registerLabelWidth,
-      deregisterLabelWidth,
-    }
   };
+  
+  return {
+    autoLabelWidth,
+    registerLabelWidth,
+    deregisterLabelWidth,
+  }
 
+
+}
+
+const ensureArray = (arr: any) => {
+  if(!arr && (arr as any) !== 0) return [];
+  return Array.isArray(arr)? arr : [arr];
+}
+
+export const filterFidle = (fields:FormItemContext[], props:Arrayable<FormItemProp>) => {
+  const normalized = ensureArray(props);
+  return normalized.length > 0 ? fields.filter((field) => field.prop && normalized.includes(field.prop)) : fields;
 }
 
 

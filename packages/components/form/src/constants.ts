@@ -1,5 +1,8 @@
-import type { InjectionKey } from "vue"
+import type { InjectionKey } from "vue";
+import type { FormContext, FormItemContext } from "./types";
 
-export const formContextKey: InjectionKey<any> = Symbol("formContext");
-
-export const formItemContextKey: InjectionKey<any> = Symbol("formItemContext");
+/* Injection key for provide使用 */
+export const formContextKey: InjectionKey<FormContext> =
+  Symbol('formContextKey')
+export const formItemContextKey: InjectionKey<FormItemContext> =
+  Symbol('formItemContextKey')

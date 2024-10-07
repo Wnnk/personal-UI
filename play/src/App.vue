@@ -395,12 +395,17 @@ const labelPosition = ref<string>('right');
     <button @click="labelPosition = 'left'">left</button>
     <button @click="labelPosition = 'right'">right</button>
     <button @click="labelPosition = 'top'">top</button>
-    <z-form  :model="sizeForm" :label-position="labelPosition" :size="size"  label-width="auto" :inline="true">
-      <z-form-item label="Avtivity name">
+    <z-form  :model="sizeForm" :label-position="labelPosition" :size="size"  label-width="auto" :inline="false">
+      <z-form-item label="Avtivity name" required>
         <input type="text" v-model="sizeForm.name">
       </z-form-item>
 
-      <z-form-item label="Region">
+      <z-form-item label="Region"  
+        :rules="[
+          { required: true, message: 'age is required' },
+          { type: 'number', message: 'age must be a number' },
+        ]"
+      >
         <input type="text" >
         <button>region</button>
       </z-form-item>
