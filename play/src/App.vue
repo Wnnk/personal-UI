@@ -63,7 +63,7 @@ const useApi = async() => {
   }
 }
 
-
+/* tabale */
 const tableData = [
   {
     date: '2016-05-03',
@@ -302,6 +302,7 @@ const userSort = () => {
   console.log('自定义排序')
 }
 
+ /* form */
 const sizeForm = reactive({
   name: '',
   region: '',
@@ -314,6 +315,52 @@ const sizeForm = reactive({
 })
 const size  = ref('default');
 const labelPosition = ref<string>('right');
+
+/* roulette */
+const rouletteData = ref([
+  {
+    label:"上班",
+    color:"#812f33",
+    backImage:"/download (1).png"
+  },
+  {
+    label:"摸鱼1",
+    color:"#90cbfb",
+    backImage:"/download (2).png"
+  },
+  {
+    label:"摸鱼2",
+    color:"#a5aaa3",
+    backImage:"/download (3).png"
+  },
+  {
+    label:"摸鱼3",
+    color:"#705e78",
+    backImage:"/download (4).png"
+  },
+  {
+    label:"摸鱼4",
+    color:"#fea443",
+    backImage:"/black.png"
+  },
+  {
+    label:"摸鱼5",
+    color:"#f3feb0",
+    backImage:"/download (5).png"
+  },
+])
+
+const backOption = reactive({
+  type: 'image',
+  backGroud: '../static/bg3.png'
+})
+
+const btnOption = reactive({
+  type: 'image', // 默认btn / image
+  backGroud: '../static/btn.png', // src | color
+  backGroundSecond: 'white', // 指针背景颜色
+  pointerColor: 'white', //指针颜色
+})
 </script>
 
 <template>
@@ -414,6 +461,10 @@ const labelPosition = ref<string>('right');
         <input type="checkbox">checkbox</input>
       </z-form-item>
     </z-form>
+
+    <z-roulette :data="rouletteData" :back-option="backOption" :btn-option="btnOption"></z-roulette>
+
+    <z-luckygrid></z-luckygrid>
   </div>
 
 </template>

@@ -14,6 +14,8 @@ import Card from '@commonUI/components/card'
 import Loading from '@commonUI/components/loading'
 import { Table, TableColumn } from '@commonUI/components/table'
 import { Form, FormItem } from '@commonUI/components/form'
+import Roulette from '@commonUI/components/roulette'
+import LuckyGrid from '@commonUI/components/luckygrid'
 import '@commonUI/theme-chalk/src/index.scss'
 
 
@@ -33,6 +35,8 @@ const plugins = [
   TableColumn,
   Form,
   FormItem,
+  Roulette,
+  LuckyGrid,
 ]
 const app = createApp(App)
 plugins.forEach(plugin => {

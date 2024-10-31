@@ -1,8 +1,15 @@
 import { FormItemProps, ComponentSize, FormItemValidateState } from './formItem'
-import { FormProps } from './form'
-export type  FormContext = FormProps &{
-   
+import { FormProps  } from './form'
+import { Arrayable, FormItemProp } from './formItem'
+
+
+export type  FormContext = FormProps & {
+  validateField: (
+    props?: Arrayable<FormItemProp>,
+    callback?: FormValidateCallback
+  ) => FormValidationResult
 }
+
 
 export type FormValidateCallback = (
   isValid: boolean,
@@ -28,5 +35,6 @@ export interface FormItemContext extends FormItemProps {
     trigger: string,
     callback?: FormValidateCallback
   ) => FormValidationResult
+  filedValue: any
 
 }

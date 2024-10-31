@@ -47,7 +47,6 @@ const formItemClasses = computed(() => {
     bem.is('error', validateState.value === 'error'),
     bem.is('validating', validateState.value === 'validating'),
     bem.is('required', props.required),
-    bem.is('required',props.required),
   ];
  
   if (props.size || formContext?.size) {
@@ -166,7 +165,6 @@ const normalizedRules = computed(() => {
     const requiredRules = rules.map((rule:any, i:number) => 
       [rule,i] as const 
     ).filter(([rule]) => Object.keys(rule).includes('required'));
-    console.log(requiredRules)
     if (requiredRules.length > 0) {
       for (const [rule,i] of requiredRules) {
         if(rule.required === required) continue;
@@ -191,7 +189,22 @@ const isRequired = computed(() =>
 )
 
 // console.log(props.rules,normalizedRules.value,isRequired.value)
+let isResettingField = false
+const validate =  async() => {
+  if (!isResettingField || !props.prop) {
+    return false;
+  }
+}
 
+
+
+const fieldValue = computed(() => {
+  const model = formContext?.model;
+  if (!model || !props.prop) {
+    return ;
+  }
+  return model[props.prop];
+})
 
 
 /** 
@@ -200,12 +213,15 @@ const isRequired = computed(() =>
 const context:FormItemContext = reactive({
   ...toRefs(props),
   $el: formItemRef,
+  validateState,
   hasLabel,
   isGroup,
+  validate,
+  fieldValue,
 
 })
 provide(formItemContextKey, context);
-console.log(props.label, formContext?.model)
+
 
 </script>
 <template>

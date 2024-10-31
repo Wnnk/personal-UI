@@ -54,7 +54,7 @@ const ensureArray = (arr: any) => {
   return Array.isArray(arr)? arr : [arr];
 }
 
-export const filterFidle = (fields:FormItemContext[], props:Arrayable<FormItemProp>) => {
+export const filterFields = (fields:FormItemContext[], props:Arrayable<FormItemProp>) => {
   const normalized = ensureArray(props);
   return normalized.length > 0 ? fields.filter((field) => field.prop && normalized.includes(field.prop)) : fields;
 }

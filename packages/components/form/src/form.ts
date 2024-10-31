@@ -26,6 +26,13 @@ export const formProps = {
     type: Object,
     default: () => {}
   },
+  scrollToError: {
+    type: Boolean,
+  },
+  scrollIntoViewOptions: {
+    type: [Object, Boolean]
+  }
+
   
 } as const;
 
