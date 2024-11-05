@@ -361,6 +361,37 @@ const btnOption = reactive({
   backGroundSecond: 'white', // 指针背景颜色
   pointerColor: 'white', //指针颜色
 })
+
+const luckygridData = ref({
+  blocks: [
+    {padding: '10', background: '#869cfa'},
+    {padding: '10', background: '#f7a35c'},
+    {padding: '10', background: '#f56c6c'},
+    {padding: '10', background: '#7266ba'}
+  ],
+  prizes: [
+    { x: 0, y: 0, fonts: [{ text: '谢谢参与', top: '40%' }], },
+    { x: 1, y: 0, fonts: [{ text: '小米手环', top: '40%' }], },
+    { x: 2, y: 0, fonts: [{ text: '苹果13', top: '40%' }], },
+    { x: 2, y: 1, imgsrc: '../static/bg3.png'},
+    { x: 2, y: 2, fonts: [{ text: '优惠券100', top: '40%' }], },
+    { x: 1, y: 2, fonts: [{ text: '迷你小冰箱', top: '40%' }], },
+    { x: 0, y: 2, fonts: [{ text: '腾讯会员', top: '40%' }], },
+    { x: 0, y: 1, fonts: [{ text: '优酷会员', top: '40%' }], },
+  ],
+  buttons: [
+    {
+      x: 1, y: 1,
+      background: '#9c9dd8',
+      fonts: [{ text: '抽奖', top: '40%' }],
+    },
+  ],
+  style: {
+    background: '#b8c5f2',
+    fontSize: '14'
+  },
+
+})
 </script>
 
 <template>
@@ -464,7 +495,7 @@ const btnOption = reactive({
 
     <z-roulette :data="rouletteData" :back-option="backOption" :btn-option="btnOption"></z-roulette>
 
-    <z-luckygrid></z-luckygrid>
+    <z-luckygrid width="600" height="600" :data="luckygridData"></z-luckygrid>
   </div>
 
 </template>
