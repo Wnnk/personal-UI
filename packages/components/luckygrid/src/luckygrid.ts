@@ -12,13 +12,21 @@
     type: Object as PropType<DataType>,
     required: true,
     default: () => {}
-  }
+  },
+  gap: {
+    type: Number,
+    default: 10
+  },
+  speed: {
+    type: Number,
+    default: 1000
+  },
  }
 
  export type DataType = {
   prizes: Array<PrizesType>,
   buttons: Array<ButtonItemType>,
-  style?: StyleType,
+  // style?: StyleType,
   blocks: Array<BlockItemType>,
  }
  
@@ -27,6 +35,7 @@
   y: number,
   fonts: Object,
   imgsrc?: string,
+  background?: string,
  }
 
  export type FontsItemType = {
@@ -41,10 +50,10 @@
   background: string,
  }
 
- export type StyleType = {
-  background: string,
-  fontSize: [string, number]
- }
+//  export type StyleType = {
+//   background: string,
+//   fontSize: [string, number]
+//  }
 
  export type BlockItemType = {
   padding: [string, number],

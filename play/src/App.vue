@@ -362,6 +362,7 @@ const btnOption = reactive({
   pointerColor: 'white', //指针颜色
 })
 
+const luckygrid = ref(null);
 const luckygridData = ref({
   blocks: [
     {padding: '10', background: '#869cfa'},
@@ -370,14 +371,14 @@ const luckygridData = ref({
     {padding: '10', background: '#7266ba'}
   ],
   prizes: [
-    { x: 0, y: 0, fonts: [{ text: '谢谢参与', top: '40%' }], },
-    { x: 1, y: 0, fonts: [{ text: '小米手环', top: '40%' }], },
-    { x: 2, y: 0, fonts: [{ text: '苹果13', top: '40%' }], },
+    { x: 0, y: 0, fonts: [{ text: '谢谢参与', top: '40%'}],background:'#b8c5f2'  },
+    { x: 1, y: 0, fonts: [{ text: '小米手环', top: '40%' }], background:'#f7a35c'},
+    { x: 2, y: 0, fonts: [{ text: '苹果13', top: '40%'  }],background:'#f56c6c' },
     { x: 2, y: 1, imgsrc: '../static/bg3.png'},
-    { x: 2, y: 2, fonts: [{ text: '优惠券100', top: '40%' }], },
-    { x: 1, y: 2, fonts: [{ text: '迷你小冰箱', top: '40%' }], },
-    { x: 0, y: 2, fonts: [{ text: '腾讯会员', top: '40%' }], },
-    { x: 0, y: 1, fonts: [{ text: '优酷会员', top: '40%' }], },
+    { x: 2, y: 2, fonts: [{ text: '优惠券100', top: '40%'  }], background:'#90cbfb' },
+    { x: 1, y: 2, fonts: [{ text: '迷你小冰箱', top: '40%' }], background:'#f7a35c' },
+    { x: 0, y: 2, fonts: [{ text: '腾讯会员', top: '40%'  }],background:'#f56c6c' },
+    { x: 0, y: 1, fonts: [{ text: '优酷会员', top: '40%' }],background:'#90cbfb' },
   ],
   buttons: [
     {
@@ -390,8 +391,9 @@ const luckygridData = ref({
     background: '#b8c5f2',
     fontSize: '14'
   },
-
 })
+
+
 </script>
 
 <template>
@@ -495,7 +497,7 @@ const luckygridData = ref({
 
     <z-roulette :data="rouletteData" :back-option="backOption" :btn-option="btnOption"></z-roulette>
 
-    <z-luckygrid width="600" height="600" :data="luckygridData"></z-luckygrid>
+    <z-luckygrid width="600" height="600" :data="luckygridData" :gap="10" :speed="800" ref="luckygrid"></z-luckygrid>
   </div>
 
 </template>
