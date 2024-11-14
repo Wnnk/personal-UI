@@ -317,49 +317,28 @@ const size  = ref('default');
 const labelPosition = ref<string>('right');
 
 /* roulette */
-const rouletteData = ref([
-  {
-    label:"上班",
-    color:"#812f33",
-    backImage:"/download (1).png"
-  },
-  {
-    label:"摸鱼1",
-    color:"#90cbfb",
-    backImage:"/download (2).png"
-  },
-  {
-    label:"摸鱼2",
-    color:"#a5aaa3",
-    backImage:"/download (3).png"
-  },
-  {
-    label:"摸鱼3",
-    color:"#705e78",
-    backImage:"/download (4).png"
-  },
-  {
-    label:"摸鱼4",
-    color:"#fea443",
-    backImage:"/black.png"
-  },
-  {
-    label:"摸鱼5",
-    color:"#f3feb0",
-    backImage:"/download (5).png"
-  },
-])
-
-const backOption = reactive({
-  type: 'image',
-  backGroud: '../static/bg3.png'
-})
-
-const btnOption = reactive({
-  type: 'image', // 默认btn / image
-  backGroud: '../static/btn.png', // src | color
-  backGroundSecond: 'white', // 指针背景颜色
-  pointerColor: 'white', //指针颜色
+const rouletteData = ref({
+  blocks: [
+    {padding: '10', background: '#869cfa', imgsrc: '../static/bg3.png'},
+    {padding: '10', background: '#f7a35c'},
+  ],
+  prizes: [
+    { background: '#e9e8fe', fonts: [{ text: '0' }], probability : 0.1 },
+    { background: '#b8c5f2', fonts: [{ text: '1' }], probability : 0.2 },
+    { background: '#e9e8fe', fonts: [{ text: '2' }],  probability : 0.15 },
+    { background: '#b8c5f2', fonts: [{ text: '3' }], probability : 0.25 },
+    { background: '#e9e8fe', fonts: [{ text: '4' }], probability : 0.2 },
+    { background: '#b8c5f2', fonts: [{ text: '5' }], probability : 0.1 },
+  ],
+  buttons: [
+    { radius: '40%', background: '#617df2' },
+    { radius: '35%', background: '#afc8ff' },
+    {
+      radius: '30%', background: '#869cfa',
+      pointer: true,
+      fonts: [{ text: '开始', top: '-10px' }]
+    },
+  ],
 })
 
 const luckygrid = ref(null);
@@ -495,9 +474,9 @@ const luckygridData = ref({
       </z-form-item>
     </z-form>
 
-    <z-roulette :data="rouletteData" :back-option="backOption" :btn-option="btnOption"></z-roulette>
+    <z-roulette :data="rouletteData" width="200" height="200"></z-roulette>
 
-    <z-luckygrid width="600" height="600" :data="luckygridData" :gap="10" :speed="800" ref="luckygrid"></z-luckygrid>
+    <z-luckygrid width="600" height="600" :data="luckygridData" :gap="10" :speed="1000" :time="10000" ref="luckygrid"></z-luckygrid>
   </div>
 
 </template>

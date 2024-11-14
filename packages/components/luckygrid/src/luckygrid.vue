@@ -5,7 +5,7 @@ import { onMounted, reactive, toRefs, ref, onUnmounted } from 'vue';
 
 const bem = createNamespace('luckygrid');
 const props = defineProps(luckyGridProps);
-const { width, height, data, gap, speed } = toRefs(props);
+const { width, height, data, gap, speed, time } = toRefs(props);
 
 defineOptions({
   name: 'z-luckygrid'
@@ -25,6 +25,9 @@ const originX = ref(0);
 const originY = ref(0);
 /* 抽奖圈数 */
 const prizeCount = ref(0);
+/* 帧数时间 */
+const frameTime = ref(0);
+const originTime = ref(0);
 
 
 /** 
@@ -190,7 +193,7 @@ const mouseEvent = async  () => {
       const mouseY = event.clientY - rect.top;
       if (mouseX > x && mouseX < x + cellSize && mouseY > y && mouseY < y + cellSize) {
         isStart.value = true;
-        startAnimation();
+        startAnimation(0 , 6);
       }
     }
   };
@@ -206,46 +209,82 @@ const mouseEvent = async  () => {
 /** 
  * @description: 开始抽奖动画
 **/
-const startAnimation = async (i:number = 0) => {
+let sp = speed.value;
+const startAnimation = async (i:number = 0, targetPrize:number) => {
   const ctx = canvasOptions.ctx;
   const canvasRecord = canvasOptions.canvasRecord;
   if (!ctx) return;
+ 
 
-  /* 停止抽奖 */
-  if (prizeCount.value > 3) {
-    isStart.value = false;
-    prizeCount.value = 0;
+
+  /* 基础数据 */
+  const item = data.value.prizes[i];
+  const {x, y, cellSize} = getGridCellByXY(item.x, item.y);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'blue';
+
+
+  const nowTime = new Date().getTime();
+  const timeDiff = nowTime - frameTime.value;
+
+  /* 动画帧数时间 */
+  if (timeDiff < sp ){
+    window.requestAnimationFrame(() => {
+      startAnimation(i, targetPrize);
+    });
     return;
   }
-  setTimeout(() => {
-    /* 基础数据 */
-    const item = data.value.prizes[i];
-    const {x, y, cellSize} = getGridCellByXY(item.x, item.y);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'blue';
 
 
-    if  (i === 0 && prizeCount.value === 0) {
-      /* 记录当前画布状态 */
-      const imageData = ctx.getImageData(0, 0, Number(width.value), Number(height.value));
-      canvasRecord.push(imageData);
-    } else {
-      /* 还原画布状态 */
-      ctx.putImageData(canvasRecord[0], 0, 0);
-    }
-   
-    ctx.beginPath();
-    ctx.strokeRect(x - 2, y - 2, cellSize + 4, cellSize + 4);
-    ctx.stroke();
-    ctx.closePath();
 
-    i++;
-    if (i > data.value.prizes.length - 1) {
-      i = 0;
-      prizeCount.value++;
-    }
-    startAnimation(i);
-  },speed.value)
+ 
+
+
+  if  (i === 0 && prizeCount.value === 0) {
+    /* 记录当前画布状态 */
+    const imageData = ctx.getImageData(0, 0, Number(width.value), Number(height.value));
+    canvasRecord.push(imageData);
+    /* 记录第一次点击时间 */
+    originTime.value = new Date().getTime();
+    frameTime.value = originTime.value;
+  } else {
+    /* 还原画布状态 */
+    ctx.putImageData(canvasRecord[0], 0, 0);
+    frameTime.value = new Date().getTime();
+  }
+
+  /* 加速 */
+  if (nowTime - originTime.value < time.value / 2) {
+    sp -= speed.value / 11;
+  } else {
+    /* 减速 */
+    sp += speed.value / 11;
+  }
+  console.log(`当前速度${sp}`);
+  
+  ctx.beginPath();
+  ctx.strokeRect(x - 2, y - 2, cellSize + 4, cellSize + 4);
+  ctx.stroke();
+  ctx.closePath();
+
+   /* 停止抽奖 */
+   if (nowTime - originTime.value >= time.value && originTime.value!== 0 && targetPrize === i ) {
+    isStart.value = false;
+    prizeCount.value = 0;
+    stopAnimation(targetPrize);
+    return;
+  }
+
+
+  i++;
+  if (i > data.value.prizes.length - 1) {
+    i = 0;
+    prizeCount.value++;
+  }
+  window.requestAnimationFrame(() => {
+    startAnimation(i, targetPrize);
+  });
+    
  
 }
 

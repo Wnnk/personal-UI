@@ -21,6 +21,11 @@
     type: Number,
     default: 1000
   },
+  time: {
+    type: Number,
+    required: true,
+    default: 10000
+  },
  }
 
  export type DataType = {

@@ -1,33 +1,57 @@
 import { PropType } from 'vue'
 export const rouletteProps = {
-  data: {
-    type: Array as PropType<BaseData[]>,
-    default: () => []
-  },
-  backOption: {
-    type: Object as PropType<BackOption>,
-    default: () => {}
-  },
-  btnOption: {
-    type: Object as PropType<BtnOption>,
-    default: () => {}
-  }
+ width: {
+  type: [Number, String],
+  default: 200
+ },
+ height: {
+  type: [Number, String],
+  default: 200
+ },
+ data: {
+  type: Object as PropType<DataType>,
+  required: true,
+  default: () => {}
+ },
+ gap: {
+  type: Number,
+  default: 10
+ },
+
 }
 
-export type BackOption = {
-  type: string, // image or default
-  backGroud: string, // src or colors
-}
+export type DataType = {
+  prizes: Array<PrizesType>,
+  buttons: Array<ButtonItemType>,
+  // style?: StyleType,
+  blocks: Array<BlockItemType>,
+ }
 
-export type BaseData = {
-  label: string,
-  color: string,
-  backImage? :string,
-}
+ export type PrizesType = {
+  fonts: Array<FontsItemType>,
+  imgsrc?: string,
+  background?: string,
+  probability? : number,
+ }
 
-export type BtnOption = {
-  type: string, // image | color
-  backGroud:string, // src or colors
-  backGroundSecond:string, //背景颜色
-  pointerColor:string, //指针颜色
-}
+ export type ButtonItemType = {
+  radius: string,
+  fonts?: Array<FontsItemType>,
+  pointer?: boolean,
+  background: string,
+ }
+ export type BlockItemType = {
+  padding: string,
+  background: string,
+  imgsrc?:string,
+ }
+
+ export type FontsItemType = {
+  text: string,
+  top?:string,
+  bottom?:string,
+  left?:string,
+  right?:string,
+  pointer?: boolean,
+  background?: string,
+ }

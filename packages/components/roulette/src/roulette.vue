@@ -1,101 +1,187 @@
 <script setup lang='ts'>
 import { createNamespace } from '@commonUI/utils/create';
-import { rouletteProps, BackOption } from './roulette'
+import { rouletteProps, PrizesType } from './roulette'
 import { onMounted, reactive, toRefs, ref } from 'vue';
 const bem = createNamespace('roulette');
 defineOptions({
   name: 'z-roulette'
 });
 const props = defineProps(rouletteProps);
-const { data, backOption, btnOption } = toRefs(props);
-
-const ballOptions = reactive(data.value);
-const backImageOption = reactive(backOption.value);
-const backBtnImage = reactive(btnOption.value);
-
+const {width, height, data, gap } = toRefs(props);
 const canvasOptions = reactive({
-  ctx: null as CanvasRenderingContext2D | null,
-  canvas: null as HTMLCanvasElement | null,
-  angle: 0.1,
-  speed: 0.1,
-  mustIndex: 0,
-});
+  ctx: null  as CanvasRenderingContext2D | null,
+  canvas: null  as HTMLCanvasElement | null,
+})
+/* 是否正在播放 */
+const isPlaying = ref(false);
+/* 初始速度 */
+const speed = ref(0.1);
 
-
-
-/* 转盘配置  */
-const isAnimal = ref(false);
-const {ctx,canvas,angle,speed,mustIndex} = toRefs(canvasOptions);
-const animateFlag = ref(0);
-const speedFlag = ref(0);
-const downSpeed = ref(0.0001);
 const startAngle = ref(0);
 const endAngle = ref(0);
+/* 转动角度 */
+const angle = ref(0);
+/* 动画帧 */
+const frameFlag = ref();
+const speedFlag = ref();
+/* 目标值 */
+const targetIndex = ref(0);
+/* 减速值 */
+const downSpeed = ref(0.01);
 
-onMounted( async () => {
-  canvasOptions.canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  canvasOptions.ctx = canvasOptions.canvas?.getContext('2d');
-  await animate()
-  await eventOfCanvas();
-});
+
 
 /** 
- * @description: 绘制基础圆盘
- * @param {beginPointX: number, beginPointY: number, radius: number,startAngle: number, endAngle: number, backgroudColor: string}
-  **/
-const drawBall = (beginPointX: number, beginPointY: number, radius: number, startAngle: number, endAngle: number, backgroudColor: string) => {
+ * @description: 绘制背景
+**/
+const drawBackground = async () => {
   const ctx = canvasOptions.ctx;
-  if (!ctx) return;
-  ctx.beginPath();
-  ctx.arc(beginPointX,beginPointY, radius, startAngle, endAngle);
-  ctx.fillStyle = backgroudColor;
-  ctx.fill();
-};
+  const canvas = canvasOptions.canvas;
+  if (!ctx ||!canvas) return;
+  ctx.clearRect(0, 0, canvasOptions.canvas!.width, canvasOptions.canvas!.height);
+  const size = Math.min(canvas.width, canvas.height);
+  for (let i = 0; i < data.value.blocks.length; i++) {
+    const block = data.value.blocks[i];
+
+    ctx.beginPath();
+    ctx.arc(
+      size / 2, 
+      size / 2, 
+      size / 2 - Number(block.padding ) * i, 
+      0,
+      2 * Math.PI
+    )
+
+    if (block.imgsrc) {
+      const backgroundImage = new Image();
+      backgroundImage.src = block.imgsrc;
+      await new Promise ((resolve) => {
+        backgroundImage.onload = async () => {
+        ctx.save();
+        ctx.clip();
+        ctx.drawImage(backgroundImage, 0, 0, size, size);
+        ctx.restore();
+        resolve(true);
+        }
+      })
+
+    } else {
+      ctx.fillStyle = block.background;
+      ctx.fill();
+    }
+   ctx.closePath();
+  }
+}
 
 /** 
- * @description: 
- * @param { beginPointX: number, beginPointY: number, radius: number, startAngle: number, endAngle: number, backImage: Object }
-  */
-  const drawRoundImage = (beginPointX,beginPointY,radius,startAngle,endAngle,backImage) =>{
-  const ctx = canvasOptions.ctx
-  if (!ctx) return;
-    let temp = Math.min(backImage.width,backImage.height); 
-    let scale = radius / temp;
+ * @description: 绘制指针
+**/
+const drawPointer = () => {
+  const ctx = canvasOptions.ctx;
+  const canvas = canvasOptions.canvas;
+  if (!ctx ||!canvas) return;
+  const centerX  = canvas.width / 2;
+  const centerY  = canvas.height / 2;
+
+  /* 绘制外围 */
+  for (let i = 0; i < data.value.buttons.length; i++) {
     ctx.beginPath();
-    ctx.rect(
-      beginPointX-backImage.width*scale, 
-      beginPointX-backImage.height*scale, 
-      beginPointX+radius, 
-      beginPointY+backImage.height*scale
-    );
-    // ctx.stroke();
-    ctx.fill()
-    ctx.drawImage(backImage, beginPointX-backImage.width*scale/2, beginPointY-backImage.height*scale/2,backImage.width*scale,backImage.height*scale);
+    const button = data.value.buttons[i];
+    const radius = button.radius.endsWith('%') 
+    ? centerX  * Number(button.radius.replace('%', '')) / 100 
+    : Number(button.radius);
+    ctx.fillStyle = button.background;
+    /* 不绘制指针 */
+    if (!button.pointer) {
+      ctx.arc(
+        centerX, 
+        centerY, 
+        radius, 
+        0,
+        2 * Math.PI
+      );
+      ctx.fill();
+      ctx.closePath();
+    } else {
+      /* 绘制指针 */
+      ctx.arc(
+        centerX, 
+        centerY, 
+        radius, 
+        -45 * Math.PI / 180,
+        225 * Math.PI / 180
+      );
+      /* 计算起终点 */
+      const startX = centerX + radius * Math.cos(-45 * Math.PI / 180);
+      const startY = centerY + radius * Math.sin(-45 * Math.PI / 180);
+      const endX = centerX+ radius * Math.cos(225 * Math.PI / 180);
+      const endY = centerY + radius * Math.sin(225 * Math.PI / 180);
+      ctx.moveTo(centerX, centerY - 50);
+      ctx.lineTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.lineTo(centerX, centerY - 50);
+      ctx.fill();
+      ctx.closePath();
+    }
+    /* 绘制文字 */
+    if (button.fonts && button.fonts.length > 0) {
+      ctx.textAlign = "center";
+      ctx.font = "bold 14px serif";
+      for (let i = 0; i < button.fonts.length; i++) {
+        const font = button.fonts[i];
+        if (font.background) {
+          ctx.fillStyle = font.background;
+        } else {
+          ctx.fillStyle = 'black';
+        }
+        if (font.top || font.bottom || font.left || font.right) {
+          
+        }
+        ctx.fillText(font.text, centerX, centerY)
+      }
+    }
+
+  }
+
 }
 
 
-
 /** 
- * @description 绘制圆弧
- * @param {beginPointX: number, beginPointY: number, radius: number, startAngle: number, endAngle: number, backgroundColor: string, item: Object}
+ * @description: 绘制轮盘
+ * @param beginPointX 开始点x坐标
+ * @param beginPointY 开始点y坐标
+ * @param startAngle 开始角度
+ * @param endAngle 结束角度
+ * @param item 绘制项
 **/
-const drawArc = (beginPointX: number, beginPointY: number, radius: number, startAngle: number, endAngle: number, backgroundColor: string, item: Object) => {
+const drawRoulette = (beginPointX: number, beginPointY: number, startAngle: number, endAngle: number, item: PrizesType) => {
   const ctx = canvasOptions.ctx;
-  if (!ctx) return;
-  const centerX = 300;
-  const centerY = 300;
-  const orbitRadius = 200;
+  const canvas = canvasOptions.canvas;
+  if (!ctx ||!canvas) return;
+  const centerX  = canvas.width / 2;
+  const centerY  = canvas.height / 2;
+  const size = Math.min(centerX, centerY);
+  /*  计算半径 */
+  const orbitRadius = size - data.value.blocks.reduce((acc, cur) => {
+    return acc + Number(cur.padding) ;
+  },0)
+ 
   ctx.beginPath();
-  ctx.arc(beginPointX, beginPointY, radius, startAngle, endAngle);
-  if (backgroundColor) {
-    ctx.fillStyle = backgroundColor;
-    ctx.strokeStyle = 'white'
+  ctx.arc(
+    beginPointX,
+    beginPointY,
+    orbitRadius,
+    startAngle,
+    endAngle
+  );
+  if (item.background) {
+    ctx.fillStyle = item.background;
   } else {
-    ctx.fillStyle = 'rgba(0,0,0,0)';
+    ctx.fillStyle =  "rgba(0,0,0,0)";
   }
   ctx.fill();
   ctx.beginPath();
-  ctx.moveTo(300, 300);
+  ctx.moveTo(centerX, centerY);
   const startX = centerX + orbitRadius * Math.cos(startAngle);
   const startY = centerY + orbitRadius * Math.sin(startAngle);
   const endX = centerX + orbitRadius * Math.cos(endAngle);
@@ -103,221 +189,180 @@ const drawArc = (beginPointX: number, beginPointY: number, radius: number, start
   ctx.lineTo(startX, startY);
   ctx.lineTo(endX, endY);
   ctx.closePath();
-  ctx.fillStyle = backgroundColor;
-  ctx.strokeStyle = backgroundColor;
-  ctx.stroke();
+  // ctx.stroke();
   ctx.fill();
   ctx.save();
-  ctx.translate((startX + endX) / 2, (startY + endY) / 2);
-  let angle = 0;
-  let index = ballOptions.findIndex(ite => ite.label === ite.label);
-  if (index !== ballOptions.length - 1) {
-    angle = (startAngle + endAngle) / 2  + Math.PI / 2;
-  } else {
-    angle = (startAngle + endAngle) / 2 - Math.PI / 2;
-  }
-  /* 旋转画布 */
+  ctx.translate((startX+endX)/2, (startY+endY)/2);
+  let angle = (startAngle + endAngle) / 2 + Math.PI / 2;
   ctx.rotate(angle);
   ctx.font = '24px Arial bold';
-  ctx.fillStyle = '#AA625B'
+  ctx.fillStyle = '#AA625B';
   ctx.textAlign = 'center';
-  ctx.fillText(item.label, 0, 0);
+  for (const font of item.fonts) {
+    ctx.fillText(font.text, 0, 10);
+  }
   ctx.restore();
-
-  // if ('backImage' in item) {
-  //   let img = new Image();
-  //   img.src = item.backImage;
-  //   img.onload = () => {
-  //     ctx.save();
-  //     ctx.translate(((startX+endX)/2+300)/2, ((startY+endY)/2+300)/2);
-  //     let angle = 0;
-  //     let index = ballOptions.findIndex(ite =>ite.label == item.label);
-  //     if(index != ballOptions.length-1){
-  //       angle = (startAngle + endAngle) / 2 + Math.PI/2;
-  //     }else{
-  //       angle = (startAngle + endAngle) / 2 - Math.PI/2;
-  //     }
-  //     ctx.rotate(angle);
-  //     drawRoundImage(0,0,60,0,Math.PI*2,img)
-  //     ctx.restore();
-  //   }
-  // }
 }
 
 
 /** 
- * @description: 绘制指针
- * @param color: string,
+ * @description: 抽奖动画
+ * 
 **/
 
-const drawMark = (color: string) => {
-  const ctx = canvasOptions.ctx;
-  if (!ctx) return;
-  ctx.beginPath();
-  const centerX = 300;
-  const centerY = 300;
-  const orbitRadius = 40;
-  const startX = centerX + orbitRadius * Math.cos(Math.PI / 3 + Math.PI);
-  const startY = centerY - orbitRadius * Math.sin(Math.PI / 3);
-  const endX = centerX + orbitRadius * Math.cos(Math.PI / 3 );
-  const endY = centerY - orbitRadius * Math.sin(Math.PI / 3);
-  const tempX = (startX + endX) /2;
-  const tempY = (startY + endY) /2;
-  const targetX  = tempX * 2 - 300;
-  const targetY = tempY * 2 - 300;
-  ctx.moveTo(startX, startY);
-  ctx.lineTo(targetX, targetY);
-  ctx.lineTo(endX, endY);
-  ctx.fillStyle = color;
-  ctx.fill();
-  ctx.font = '24px Arial';
-  ctx.fillStyle = 'black';
-  ctx.textAlign = 'center';
-  ctx.fillText('开始', 300, 308);
-};
-
 const animate = async () => {
-  if (backImageOption.type === 'image') {
-    /* 绘制圆盘土图片背景 */
-    const img = new Image();
-    img.src = backImageOption.backGroud;
-    
-    // 设置层级
-    img.onload = async () => {
-      // await drawRoundImage(300, 300, 480, 0, 2 * Math.PI, img);
-      /* 计算角度分配 */
-      for (const [index,item] of ballOptions.entries()) {
-        let startAngle = 0;
-        let endAngle = 0;
-        if (index) {
-          startAngle = 2 * Math.PI * (index / ballOptions.length);
-        }
-        if (index !== ballOptions.length - 1) {
-          endAngle = 2 * Math.PI * ((index + 1) / ballOptions.length);
-        }
-        await drawArc(300, 300, 200, startAngle + angle.value, endAngle + angle.value, item.color, item);
-      }
+  const ctx = canvasOptions.ctx;
+  const canvas = canvasOptions.canvas;
+  if (!ctx ||!canvas) return;
+  /* 绘制背景 */
+  await drawBackground();
+  console.log('绘制背景')
+  let totalProbability = 0;
+  for (const prize of data.value.prizes) {
+    if (!prize.probability) {
+      /* 默认概率 */
+      prize.probability = 0.1;
     }
-  } else {
-    /* 绘制基础圆盘 */
-    drawBall(300, 300, 220, 0 ,Math.PI * 2, backImageOption.backGroud)
-    for (const [index, item] of ballOptions.entries()) {
-      let startAngle = 0;
-      let endAngle = 0;
-      if (index) {
-        startAngle = 2 * Math.PI * (index / ballOptions.length);
-      }
-      if (index !== ballOptions.length - 1) {
-        endAngle = 2 * Math.PI * ((index + 1) / ballOptions.length);
-      }
-      await drawArc(300,300,200,startAngle+angle.value,endAngle+angle.value,item.color,item)
-    }
+    startAngle.value = 2 * Math.PI * (totalProbability)
+    endAngle.value = 2 * Math.PI * (totalProbability + prize.probability);
+    await drawRoulette(
+      canvas.width / 2, 
+      canvas.height / 2, 
+      startAngle.value + angle.value, 
+      endAngle.value + angle.value, 
+      prize
+    )
+    console.log('绘制奖品')
+    /* 更新总概率 */
+    totalProbability += prize.probability;
   }
 
-  if (backBtnImage.type === 'image') {
-    const img2 = new Image();
-    img2.src = backBtnImage.backGroud;
-    img2.onload = async () => {
-      // await drawRoundImage(300, 300, 50, 0, 2 * Math.PI, img2);
-    }
-  } else {
-    await drawBall(300, 300, 50, 0, Math.PI * 2, backBtnImage.backGroud);
-    await drawBall(300,300, 40, 0, Math.PI * 2, backBtnImage.backGroundSecond);
-    await drawMark(backBtnImage.pointerColor);
-  }
-  if (isAnimal.value) {
-    speed.value += 0.0010;
+  /* 绘制指针 */
+  await drawPointer();
+  console.log('绘制指针');
+
+  if (isPlaying.value) {
+    speed.value += 0.0005;
     angle.value += speed.value;
-    animateFlag.value = requestAnimationFrame(animate);
+    // setTimeout(() => {
+    //   frameFlag.value = requestAnimationFrame(animate);
+    // },300)
+    
+    
   }
   if (speed.value > 0.32) {
     stopAnimate();
+   
   }
 }
 
+
 /** 
- * @description: 开始按钮点击事件
+ * @description: 点击按钮事件
  * 
-**/
-const eventOfCanvas = () => {
+  */
+const clickButtonEvent = async() => {
   const canvas = canvasOptions.canvas;
   if (!canvas) return;
-  canvas.addEventListener('click', event => {
+  if (isPlaying.value) return;
+  canvas.addEventListener('click', (event) => {
+    const centerX  = canvas.width / 2;
+    const centerY  = canvas.height / 2;
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    if (
-      x >= 260 && 
-      x <= 340 && 
-      y >= 260 && 
-      y <= 340
-    ) {
+    let maxRadius = 0;
+    /* 计算最大按钮半径 */
+    for (const button of data.value.buttons) {
+      const radius = button.radius.endsWith('%') 
+      ? centerX  * Number(button.radius.replace('%', '')) / 100 
+      : Number(button.radius);
+      maxRadius = Math.max(maxRadius, radius);
+    }
+    if(x > centerX - maxRadius 
+        && x < centerX + maxRadius 
+        && y > centerY - maxRadius 
+        && y < centerY + maxRadius
+      ) {
       startAnimate();
     }
-  });
+  })
 }
 
-/**  
+/** 
  * @description: 开始抽奖动画
 **/
 const startAnimate = () => {
-  isAnimal.value = true;
-  animate()
+  console.log('startAnimate');
+  isPlaying.value = true;
+  animate();
   speed.value = 0.1;
+  
 }
 
 /** 
  * @description: 停止抽奖动画
-  */
-  const stopAnimate = () => {
-    console.log('停止抽奖动画')
-    if (mustIndex.value) {
-      if (!startAngle.value) {
-        mustIndex.value = ballOptions.length - mustIndex.value - 2;
-      }
-      startAngle.value = ((mustIndex.value) * Math.PI * 2) / ballOptions.length;
-      endAngle.value = ((mustIndex.value + 1) * Math.PI * 2) / ballOptions.length;
-      let startAngleTemp = startAngle.value;
-      let endAngleTemp = endAngle.value;
-      let stopAngle = (startAngleTemp + endAngleTemp) / 2;
-      let baseAngel = angle.value % (2 * Math.PI);
-      // downSpeed.value = stopAngle - baseAngel;
-      subSpeed();
-    } else {
-      subSpeed();
+ * 
+**/
+const stopAnimate = () => {
+  if (targetIndex.value) {
+   if (targetIndex.value) {
+    if (!startAngle.value) {
+      targetIndex.value = Math.floor(Math.random() * data.value.prizes.length);
     }
+    startAngle.value = ((targetIndex.value) * 2 * Math.PI) / data.value.prizes.length;
+    endAngle.value = ((targetIndex.value + 1) * 2 * Math.PI) / data.value.prizes.length;
+    let tempStartAngle = startAngle.value;;
+    let tempEndAngle = endAngle.value;
+    let stopAngle = (tempStartAngle + tempEndAngle) / 2;
+    let baseAngle = angle.value % (2 * Math.PI);
+    downSpeed.value = stopAngle < baseAngle ? (2 * Math.PI - baseAngle + stopAngle) / 1000 : (stopAngle - baseAngle) / 1000;
+    slowSpeed();
+   } else {
+    slowSpeed();
+   }
   }
+}
+
 
 /** 
- * @description: 减速动画
+ * @description: 动画减速
+ * 
 **/
-const subSpeed = () => {
+const slowSpeed = () => {
   speed.value -= downSpeed.value;
-  if (mustIndex.value) {
-    if (!(angle.value % (2 * Math.PI) > startAngle.value && angle.value % (2 * Math.PI) < endAngle.value)) {
-      speedFlag.value = requestAnimationFrame(subSpeed);
+  if (targetIndex.value) {
+    if (!(angle.value % (2 * Math.PI) > startAngle.value 
+      && angle.value % ( 2 * Math.PI) < endAngle.value)) {
+      speedFlag.value = requestAnimationFrame(slowSpeed);
     } else if (speed.value < 0) {
-      cancelAnimationFrame(animateFlag.value);
+      cancelAnimationFrame(frameFlag.value);
       cancelAnimationFrame(speedFlag.value);
     } else {
-      cancelAnimationFrame(animateFlag.value);
+      cancelAnimationFrame(frameFlag.value);
       cancelAnimationFrame(speedFlag.value);
     }
   } else {
     if (speed.value < 0) {
-      cancelAnimationFrame(animateFlag.value);
+      cancelAnimationFrame(frameFlag.value);
       cancelAnimationFrame(speedFlag.value);
     } else {
-      speedFlag.value = requestAnimationFrame(subSpeed);
+      speedFlag.value = requestAnimationFrame(slowSpeed);
     }
   }
 }
 
+onMounted(async () => {
+  canvasOptions.canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  canvasOptions.ctx = canvasOptions.canvas.getContext('2d') as CanvasRenderingContext2D;
+  await animate();
+  await clickButtonEvent();
+})
 </script>
 
 <template>
   <div :class="bem.b()">
-    <canvas id="canvas" width="600" height="600"></canvas>
+    <canvas id="canvas" :width="width" :height="height"></canvas>
   </div>
 </template>
 
