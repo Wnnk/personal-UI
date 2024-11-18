@@ -25,9 +25,10 @@ const angle = ref(0);
 const frameFlag = ref();
 const speedFlag = ref();
 /* 目标值 */
-const targetIndex = ref(0);
+const targetIndex = ref(5);
 /* 减速值 */
-const downSpeed = ref(0.01);
+const downSpeed = ref(0.002);
+
 
 
 
@@ -158,6 +159,7 @@ const drawRoulette = (beginPointX: number, beginPointY: number, startAngle: numb
   const ctx = canvasOptions.ctx;
   const canvas = canvasOptions.canvas;
   if (!ctx ||!canvas) return;
+  
   const centerX  = canvas.width / 2;
   const centerY  = canvas.height / 2;
   const size = Math.min(centerX, centerY);
@@ -192,17 +194,65 @@ const drawRoulette = (beginPointX: number, beginPointY: number, startAngle: numb
   // ctx.stroke();
   ctx.fill();
   ctx.save();
-  ctx.translate((startX+endX)/2, (startY+endY)/2);
+  ctx.translate((startX + endX) / 2, (startY + endY) / 2);
   let angle = (startAngle + endAngle) / 2 + Math.PI / 2;
   ctx.rotate(angle);
   ctx.font = '24px Arial bold';
   ctx.fillStyle = '#AA625B';
   ctx.textAlign = 'center';
   for (const font of item.fonts) {
-    ctx.fillText(font.text, 0, 10);
+    ctx.fillText(font.text, 0, 15);
   }
   ctx.restore();
 }
+
+
+/**
+ * @description： 计算停止时概率的开始角度和结束角度
+ *   
+**/
+const calculateAngle = () => {
+  /* 总奖品数量 */
+  const totalPrizes = data.value.prizes.length;
+  /* 总概率 */
+  let totalProbability = 0;
+
+
+  data.value.prizes.forEach((prize) => {
+    if (!prize.probability) {
+      prize.probability =  1 / totalPrizes;
+    }
+
+    totalProbability += prize.probability;
+  });
+
+  const angles = data.value.prizes.map((prize) => {
+    return (prize.probability! / totalProbability) * (2 * Math.PI);
+  })
+
+  let startAngle = 0;
+
+
+  for (let i = 0; i < angles.length; i++) {
+    if (i === targetIndex.value) {
+      const endAngle = startAngle + angles[i];
+      return {
+        startAngle,
+        endAngle
+      };
+    }
+    startAngle += angles[i];
+  }
+
+
+
+  return {
+    startAngle: 0,
+    endAngle: 0
+  }
+}
+
+
 
 
 /** 
@@ -214,9 +264,7 @@ const animate = async () => {
   const ctx = canvasOptions.ctx;
   const canvas = canvasOptions.canvas;
   if (!ctx ||!canvas) return;
-  /* 绘制背景 */
-  await drawBackground();
-  console.log('绘制背景')
+ 
   let totalProbability = 0;
   for (const prize of data.value.prizes) {
     if (!prize.probability) {
@@ -232,25 +280,23 @@ const animate = async () => {
       endAngle.value + angle.value, 
       prize
     )
-    console.log('绘制奖品')
+   
     /* 更新总概率 */
     totalProbability += prize.probability;
   }
 
   /* 绘制指针 */
   await drawPointer();
-  console.log('绘制指针');
 
-  if (isPlaying.value) {
-    speed.value += 0.0005;
+
+  if (isPlaying.value && speed.value < 0.32) {
+    speed.value += 0.005;
     angle.value += speed.value;
-    // setTimeout(() => {
-    //   frameFlag.value = requestAnimationFrame(animate);
-    // },300)
-    
+    frameFlag.value = requestAnimationFrame(animate);
     
   }
   if (speed.value > 0.32) {
+    console.log('stopAnimate')
     stopAnimate();
    
   }
@@ -293,35 +339,44 @@ const clickButtonEvent = async() => {
  * @description: 开始抽奖动画
 **/
 const startAnimate = () => {
-  console.log('startAnimate');
+  if (isPlaying.value) return;
   isPlaying.value = true;
   animate();
   speed.value = 0.1;
   
 }
 
+
+
+
 /** 
  * @description: 停止抽奖动画
  * 
 **/
 const stopAnimate = () => {
-  if (targetIndex.value) {
-   if (targetIndex.value) {
-    if (!startAngle.value) {
-      targetIndex.value = Math.floor(Math.random() * data.value.prizes.length);
-    }
-    startAngle.value = ((targetIndex.value) * 2 * Math.PI) / data.value.prizes.length;
-    endAngle.value = ((targetIndex.value + 1) * 2 * Math.PI) / data.value.prizes.length;
-    let tempStartAngle = startAngle.value;;
-    let tempEndAngle = endAngle.value;
-    let stopAngle = (tempStartAngle + tempEndAngle) / 2;
-    let baseAngle = angle.value % (2 * Math.PI);
-    downSpeed.value = stopAngle < baseAngle ? (2 * Math.PI - baseAngle + stopAngle) / 1000 : (stopAngle - baseAngle) / 1000;
-    slowSpeed();
-   } else {
-    slowSpeed();
-   }
+
+  if (targetIndex.value !== undefined) {
+  if (!startAngle.value) {
+    targetIndex.value = Math.floor(Math.random() * data.value.prizes.length);
   }
+  
+
+  const { startAngle: calcStartAngle, endAngle: calcEndAngle } = calculateAngle();
+  startAngle.value = calcStartAngle;
+  endAngle.value = calcEndAngle;
+
+  
+
+  let tempStartAngle = startAngle.value;;
+  let tempEndAngle = endAngle.value;
+  let stopAngle = (tempStartAngle + tempEndAngle) / 2;
+  let baseAngle = angle.value % (2 * Math.PI);
+  downSpeed.value = stopAngle < baseAngle ? (2 * Math.PI - baseAngle + stopAngle) / 1000 : (stopAngle - baseAngle) / 1000;
+  slowSpeed();
+  } else {
+  slowSpeed();
+  }
+  isPlaying.value = false;
 }
 
 
@@ -331,30 +386,42 @@ const stopAnimate = () => {
 **/
 const slowSpeed = () => {
   speed.value -= downSpeed.value;
-  if (targetIndex.value) {
-    if (!(angle.value % (2 * Math.PI) > startAngle.value 
-      && angle.value % ( 2 * Math.PI) < endAngle.value)) {
-      speedFlag.value = requestAnimationFrame(slowSpeed);
-    } else if (speed.value < 0) {
-      cancelAnimationFrame(frameFlag.value);
+
+  if (typeof targetIndex.value === 'number') {
+    const currentAngle = angle.value % (2 * Math.PI);
+    if ( currentAngle >= startAngle.value && currentAngle <= endAngle.value) {
+      console.log(currentAngle, startAngle.value, endAngle.value)
+      console.log(speed.value)
       cancelAnimationFrame(speedFlag.value);
-    } else {
       cancelAnimationFrame(frameFlag.value);
+    } else {
       cancelAnimationFrame(speedFlag.value);
     }
-  } else {
-    if (speed.value < 0) {
-      cancelAnimationFrame(frameFlag.value);
-      cancelAnimationFrame(speedFlag.value);
-    } else {
-      speedFlag.value = requestAnimationFrame(slowSpeed);
-    }
+
+    // if (!(currentAngle >= startAngle.value 
+    //   && currentAngle <= endAngle.value)) {
+    //     console.log('stopAnimate1')
+    //   speedFlag.value = requestAnimationFrame(slowSpeed);
+    // } else if (speed.value <= 0.03) {
+    //   console.log('stopAnimate2', currentAngle > startAngle.value, currentAngle < endAngle.value)
+    //   cancelAnimationFrame(frameFlag.value);
+    //   cancelAnimationFrame(speedFlag.value);
+    // } 
+    // else {
+    //   console.log('stopAnimate3',targetIndex.value)
+    //   cancelAnimationFrame(frameFlag.value);
+    //   cancelAnimationFrame(speedFlag.value);
+    // }
   }
+  
+  
 }
 
 onMounted(async () => {
   canvasOptions.canvas = document.getElementById('canvas') as HTMLCanvasElement;
   canvasOptions.ctx = canvasOptions.canvas.getContext('2d') as CanvasRenderingContext2D;
+  await drawBackground();
+  
   await animate();
   await clickButtonEvent();
 })
