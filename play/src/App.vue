@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
 import { onMounted, ref, watch, reactive} from 'vue'
-
+import Tset from './test.vue'
 
 
 /* timeAgo */
@@ -325,10 +325,10 @@ const rouletteData = ref({
   prizes: [
     { background: '#e9e8fe', fonts: [{ text: '0' }], probability : 0.1 },
     { background: '#b8c5f2', fonts: [{ text: '1' }], probability : 0.2 },
-    { background: '#e9e8fe', fonts: [{ text: '2' }],  probability : 0.15 },
-    { background: '#b8c5f2', fonts: [{ text: '3' }], probability : 0.25 },
-    { background: '#e9e8fe', fonts: [{ text: '4' }], probability : 0.2 },
-    { background: '#b8c5f2', fonts: [{ text: '5' }], probability : 0.1 },
+    { background: '#e9e8fe', fonts: [{ text: '2' }],  probability : 0.1 },
+    { background: '#b8c5f2', fonts: [{ text: '3' }], probability : 0.15 },
+    { background: '#e9e8fe', fonts: [{ text: '4' }], probability : 0.15 },
+    { background: '#b8c5f2', fonts: [{ text: '5' }], probability : 0.3 },
   ],
   buttons: [
     { radius: '40%', background: '#617df2' },
@@ -373,11 +373,58 @@ const luckygridData = ref({
 })
 
 
+const baseData = ref( [{
+    label:"上班 0 ",
+    color:"#FFE7E8",
+    backImage:"/download (1).png"
+  },
+  {
+    label:"摸鱼1",
+    color:"#FFFFFF",
+    backImage:"/download (2).png"
+  },
+  {
+    label:"摸鱼2",
+    color:"#FFE7E8",
+    backImage:"/download (3).png"
+  },
+  {
+    label:"摸鱼3",
+    color:"#FFFFFF",
+    backImage:"/download (4).png"
+  },
+  {
+    label:"摸鱼4",
+    color:"#FFE7E8",
+    backImage:"/black.png"
+  },
+  {
+    label:"摸鱼5",
+    color:"#FFFFFF",
+    backImage:"/download (5).png"
+  },
+  {
+    label:"摸鱼6",
+    color:"#FFE7E8",
+    backImage:"/download (5).png"
+  },
+])
+const btnOption = reactive({
+  type:"btn", // btn or image
+  backGroud:"/btn-back.png", // src or colors
+  backGroudSecond:"red", // 指针的背景颜色
+  pointerColor:"white", // 指针颜色
+})
+const backOption = reactive({
+  type:"default", // image or default
+  backGroud:"/bg3.png" // src or colors
+})
+
 </script>
 
 <template>
   <div class="app">
-    <z-select 
+    <!-- <z-select 
       v-model="selectValue" 
       :options="options"
       @update:options="changeOptions" 
@@ -399,7 +446,7 @@ const luckygridData = ref({
           自定义footer
         </div>
       </template>
-    </z-select>
+    </z-select> -->
 
 
     <!-- <z-card style="max-width: 480px;">
@@ -415,7 +462,7 @@ const luckygridData = ref({
 
 
    
-    <z-table :data="tableData" :border="true" height="400" summary>
+    <!-- <z-table :data="tableData" :border="true" height="400" summary>
       <z-table-column type="expand" width="50">
         <template>
           <div class="expand-row">
@@ -439,13 +486,10 @@ const luckygridData = ref({
       <z-table-column label="City" prop="city" />
       <z-table-column label="Address" prop="address" sortable :sort-method="userSort"/>
       <z-table-column label="Zip" prop="zip" />
-      <!-- <z-table-column prop="name" label="name1" width="150"/>
-      <z-table-column prop="name" label="name2" width="350"/>
-      <z-table-column prop="name" label="name3" width="350"/> -->
-    </z-table>
+    </z-table> -->
 
 
-    <hr>
+    <!-- <hr>
     {{ size }} {{ labelPosition }}
     <button @click="size = 'large'">large</button>
     <button @click="size = 'default'">default</button>
@@ -453,8 +497,8 @@ const luckygridData = ref({
 
     <button @click="labelPosition = 'left'">left</button>
     <button @click="labelPosition = 'right'">right</button>
-    <button @click="labelPosition = 'top'">top</button>
-    <z-form  :model="sizeForm" :label-position="labelPosition" :size="size"  label-width="auto" :inline="false">
+    <button @click="labelPosition = 'top'">top</button> -->
+    <!-- <z-form  :model="sizeForm" :label-position="labelPosition" :size="size"  label-width="auto" :inline="false">
       <z-form-item label="Avtivity name" required>
         <input type="text" v-model="sizeForm.name">
       </z-form-item>
@@ -472,11 +516,11 @@ const luckygridData = ref({
       <z-form-item label="Date">
         <input type="checkbox">checkbox</input>
       </z-form-item>
-    </z-form>
+    </z-form> -->
 
-    <z-roulette :data="rouletteData" width="200" height="200"></z-roulette>
-
-    <z-luckygrid width="600" height="600" :data="luckygridData" :gap="10" :speed="1000" :time="10000" ref="luckygrid"></z-luckygrid>
+    <!-- <Tset :baseData="baseData" :btnOption="btnOption" :backOption="backOption"></Tset> -->
+     <z-roulette :data="rouletteData" width="200" height="200"></z-roulette>
+    <!-- <z-luckygrid width="600" height="600" :data="luckygridData" :gap="10" :speed="1000" :time="10000" ref="luckygrid"></z-luckygrid> -->
   </div>
 
 </template>

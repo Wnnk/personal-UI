@@ -16,9 +16,6 @@ const canvasOptions = reactive({
 const isPlaying = ref(false);
 /* 初始速度 */
 const speed = ref(0.1);
-
-const startAngle = ref(0);
-const endAngle = ref(0);
 /* 转动角度 */
 const angle = ref(0);
 /* 动画帧 */
@@ -27,7 +24,13 @@ const speedFlag = ref();
 /* 目标值 */
 const targetIndex = ref(5);
 /* 减速值 */
-const downSpeed = ref(0.002);
+const downSpeed = ref(0.0005);
+/* 转盘阶段 */
+const stage = ref(0); /* 0 初始阶段 1 加速阶段 2 减速阶段 3 停止阶段 */
+/* 装盘停在指定targetIndex需要的转动范围 */
+const MaxAngle = ref(0);
+const MinAngle = ref(0);
+
 
 
 
@@ -207,6 +210,113 @@ const drawRoulette = (beginPointX: number, beginPointY: number, startAngle: numb
 }
 
 
+
+
+
+
+
+/** 
+ * @description: 抽奖动画
+ * 
+**/
+
+const animate = async () => {
+  const ctx = canvasOptions.ctx;
+  const canvas = canvasOptions.canvas;
+  if (!ctx ||!canvas) return;
+ 
+  let totalProbability = 0;
+  for (const [index,prize] of data.value.prizes.entries()) {
+    let startAngle = 0;
+    let endAngle = 0;
+    if (!prize.probability) {
+      /* 默认概率 */
+      prize.probability = 0.1;
+    }
+    startAngle = 2 * Math.PI * (totalProbability)
+    endAngle = 2 * Math.PI * (totalProbability + prize.probability);
+  
+    await drawRoulette(
+      canvas.width / 2, 
+      canvas.height / 2, 
+      startAngle + angle.value - 0.5 * Math.PI, 
+      endAngle + angle.value - 0.5 * Math.PI, 
+      prize
+    )
+   
+    /* 更新总概率 */
+    totalProbability += prize.probability;
+  }
+
+  /* 绘制指针 */
+  await drawPointer();
+
+
+
+  if (isPlaying.value && stage.value === 1) {
+    if (speed.value >= 0.32) {
+      stage.value = 2;
+    }
+    console.log('animate')
+    speed.value += 0.0005;
+    angle.value += speed.value;
+    console.log(speed.value)
+    frameFlag.value = requestAnimationFrame(animate);
+    
+  }
+  if (isPlaying.value && stage.value === 2) {
+    // cancelAnimationFrame(frameFlag.value);
+    console.log('stopAnimate')
+    stopAnimate();
+    frameFlag.value = requestAnimationFrame(animate);
+  }
+}
+
+
+/** 
+ * @description: 点击按钮事件
+ * 
+  */
+const clickButtonEvent = async() => {
+  const canvas = canvasOptions.canvas;
+  if (!canvas) return;
+  if (isPlaying.value) return;
+  canvas.addEventListener('click', (event) => {
+    const centerX  = canvas.width / 2;
+    const centerY  = canvas.height / 2;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    let maxRadius = 0;
+    /* 计算最大按钮半径 */
+    for (const button of data.value.buttons) {
+      const radius = button.radius.endsWith('%') 
+      ? centerX  * Number(button.radius.replace('%', '')) / 100 
+      : Number(button.radius);
+      maxRadius = Math.max(maxRadius, radius);
+    }
+    if(x > centerX - maxRadius 
+        && x < centerX + maxRadius 
+        && y > centerY - maxRadius 
+        && y < centerY + maxRadius
+      ) {
+      startAnimate();
+    }
+  })
+}
+
+/** 
+ * @description: 开始抽奖动画
+**/
+const startAnimate = () => {
+  if (isPlaying.value) return;
+  isPlaying.value = true;
+  stage.value = 1;
+  animate();
+  speed.value = 0.1;
+  
+}
+
 /**
  * @description： 计算停止时概率的开始角度和结束角度
  *   
@@ -253,130 +363,26 @@ const calculateAngle = () => {
 }
 
 
-
-
-/** 
- * @description: 抽奖动画
- * 
-**/
-
-const animate = async () => {
-  const ctx = canvasOptions.ctx;
-  const canvas = canvasOptions.canvas;
-  if (!ctx ||!canvas) return;
- 
-  let totalProbability = 0;
-  for (const prize of data.value.prizes) {
-    if (!prize.probability) {
-      /* 默认概率 */
-      prize.probability = 0.1;
-    }
-    startAngle.value = 2 * Math.PI * (totalProbability)
-    endAngle.value = 2 * Math.PI * (totalProbability + prize.probability);
-    await drawRoulette(
-      canvas.width / 2, 
-      canvas.height / 2, 
-      startAngle.value + angle.value, 
-      endAngle.value + angle.value, 
-      prize
-    )
-   
-    /* 更新总概率 */
-    totalProbability += prize.probability;
-  }
-
-  /* 绘制指针 */
-  await drawPointer();
-
-
-  if (isPlaying.value && speed.value < 0.32) {
-    speed.value += 0.005;
-    angle.value += speed.value;
-    frameFlag.value = requestAnimationFrame(animate);
-    
-  }
-  if (speed.value > 0.32) {
-    console.log('stopAnimate')
-    stopAnimate();
-   
-  }
-}
-
-
-/** 
- * @description: 点击按钮事件
- * 
-  */
-const clickButtonEvent = async() => {
-  const canvas = canvasOptions.canvas;
-  if (!canvas) return;
-  if (isPlaying.value) return;
-  canvas.addEventListener('click', (event) => {
-    const centerX  = canvas.width / 2;
-    const centerY  = canvas.height / 2;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    let maxRadius = 0;
-    /* 计算最大按钮半径 */
-    for (const button of data.value.buttons) {
-      const radius = button.radius.endsWith('%') 
-      ? centerX  * Number(button.radius.replace('%', '')) / 100 
-      : Number(button.radius);
-      maxRadius = Math.max(maxRadius, radius);
-    }
-    if(x > centerX - maxRadius 
-        && x < centerX + maxRadius 
-        && y > centerY - maxRadius 
-        && y < centerY + maxRadius
-      ) {
-      startAnimate();
-    }
-  })
-}
-
-/** 
- * @description: 开始抽奖动画
-**/
-const startAnimate = () => {
-  if (isPlaying.value) return;
-  isPlaying.value = true;
-  animate();
-  speed.value = 0.1;
-  
-}
-
-
-
-
 /** 
  * @description: 停止抽奖动画
  * 
 **/
 const stopAnimate = () => {
 
-  if (targetIndex.value !== undefined) {
-  if (!startAngle.value) {
-    targetIndex.value = Math.floor(Math.random() * data.value.prizes.length);
-  }
-  
+  if (typeof(targetIndex.value) === 'number') {
+
 
   const { startAngle: calcStartAngle, endAngle: calcEndAngle } = calculateAngle();
-  startAngle.value = calcStartAngle;
-  endAngle.value = calcEndAngle;
-
   
+  MaxAngle.value = (2 * Math.PI * 3 / 4) - (calcStartAngle - 0.5 * Math.PI);
+  MinAngle.value = (2 * Math.PI * 3 / 4) - ( calcEndAngle - 0.5 * Math.PI);
 
-  let tempStartAngle = startAngle.value;;
-  let tempEndAngle = endAngle.value;
-  let stopAngle = (tempStartAngle + tempEndAngle) / 2;
-  let baseAngle = angle.value % (2 * Math.PI);
-  downSpeed.value = stopAngle < baseAngle ? (2 * Math.PI - baseAngle + stopAngle) / 1000 : (stopAngle - baseAngle) / 1000;
   slowSpeed();
   } else {
+  targetIndex.value = Math.floor(Math.random() * data.value.prizes.length)
   slowSpeed();
   }
-  isPlaying.value = false;
+
 }
 
 
@@ -386,34 +392,31 @@ const stopAnimate = () => {
 **/
 const slowSpeed = () => {
   speed.value -= downSpeed.value;
-
-  if (typeof targetIndex.value === 'number') {
-    const currentAngle = angle.value % (2 * Math.PI);
-    if ( currentAngle >= startAngle.value && currentAngle <= endAngle.value) {
-      console.log(currentAngle, startAngle.value, endAngle.value)
-      console.log(speed.value)
-      cancelAnimationFrame(speedFlag.value);
-      cancelAnimationFrame(frameFlag.value);
-    } else {
-      cancelAnimationFrame(speedFlag.value);
+  angle.value += speed.value;
+  const { startAngle: calcStartAngle, endAngle: calcEndAngle } = calculateAngle();
+  const currentAngle = angle.value % (2 * Math.PI);
+  console.log('减速:',speed.value, '当前角度:', currentAngle, '目标角度:', MinAngle.value, MaxAngle.value);
+  if (typeof(targetIndex.value) === 'number' && (currentAngle < MinAngle.value || currentAngle > MaxAngle.value)) {
+    if (speed.value <0.01) {
+      speed.value  = 0.01;
     }
-
-    // if (!(currentAngle >= startAngle.value 
-    //   && currentAngle <= endAngle.value)) {
-    //     console.log('stopAnimate1')
-    //   speedFlag.value = requestAnimationFrame(slowSpeed);
-    // } else if (speed.value <= 0.03) {
-    //   console.log('stopAnimate2', currentAngle > startAngle.value, currentAngle < endAngle.value)
-    //   cancelAnimationFrame(frameFlag.value);
-    //   cancelAnimationFrame(speedFlag.value);
-    // } 
-    // else {
-    //   console.log('stopAnimate3',targetIndex.value)
-    //   cancelAnimationFrame(frameFlag.value);
-    //   cancelAnimationFrame(speedFlag.value);
-    // }
   }
-  
+  if (speed.value < 0 && (currentAngle > MinAngle.value && currentAngle < MaxAngle.value) && typeof(targetIndex.value) === 'number')  {
+    console.log('指定范围停止:',currentAngle, MinAngle.value, MaxAngle.value)
+    cancelAnimationFrame(frameFlag.value);
+    cancelAnimationFrame(speedFlag.value);
+    isPlaying.value = false;
+    stage.value = 3;
+  }
+  if (speed.value <= 0 && typeof(targetIndex.value) !== 'number' ) {
+    console.log('速度到0停止:')
+    cancelAnimationFrame(frameFlag.value);
+    cancelAnimationFrame(speedFlag.value);
+    isPlaying.value = false;
+    stage.value = 3;
+  }
+
+
   
 }
 
